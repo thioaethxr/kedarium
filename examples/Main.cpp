@@ -111,27 +111,20 @@ int main()
   glLinkProgram(shaderProgram);
 
   // VAO, VBO, and EBO
-  GLuint VAO;
+  kdr::gfx::VAO VAO1;
   kdr::gfx::VBO VBO1 {vertices, sizeof(vertices)};
   kdr::gfx::EBO EBO1 {indices, sizeof(indices)};
 
-  glGenVertexArrays(1, &VAO);
-
-  glBindVertexArray(VAO);
+  VAO1.Bind();
   VBO1.Bind();
   EBO1.Bind();
 
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+  VAO1.LinkAttribute(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)0);
+  VAO1.LinkAttribute(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)0);
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-  glEnableVertexAttribArray(1);
-
-  glBindVertexArray(0);
+  VAO1.Unbind();
   VBO1.Unbind();
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  EBO1.Unbind();
 
   // Validating the Shader Program
   glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
@@ -171,12 +164,12 @@ int main()
 
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(shaderProgram);
-    glBindVertexArray(VAO);
+    VAO1.Bind();
     glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
     glfwSwapBuffers(window);
   }
 
-  glDeleteVertexArrays(1, &VAO);
+  VAO1.Delete();
   VBO1.Delete();
   EBO1.Delete();
   glDeleteProgram(shaderProgram);

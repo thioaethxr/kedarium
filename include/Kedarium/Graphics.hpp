@@ -106,6 +106,57 @@ namespace kdr
       private:
         GLuint ID;
     };
+
+    /**
+     * Vertex Array Object (VAO) class for handling vertex array data.
+     */
+    class VAO
+    {
+      public:
+        /**
+         * Constructs a VAO and generates its identifier.
+         */
+        VAO()
+        { glGenVertexArrays(1, &this->ID); }
+
+        /**
+         * Gets the ID of the VAO.
+         *
+         * @return The OpenGL identifier (ID) of the VAO.
+         */
+        const GLuint getID() const
+        { return this->ID; }
+
+        /**
+         * Links a vertex buffer object (VBO) attribute to the VAO.
+         *
+         * @param VBO The VBO containing the attribute data.
+         * @param layout The attribute layout location.
+         * @param size The number of components per attribute.
+         * @param type The data type of each component.
+         * @param stride The byte offset between consecutive attributes.
+         * @param offset The byte offset of the first component in the attribute.
+         */
+        void LinkAttribute(VBO& VBO, GLuint layout, GLuint size, GLenum type, GLsizeiptr stride, const void* offset);
+        /**
+         * Binds the VAO to the OpenGL context.
+         */
+        void Bind()
+        { glBindVertexArray(this->ID); }
+        /**
+         * Unbinds the currently bound VAO from the OpenGL context
+         */
+        void Unbind()
+        { glBindVertexArray(0); }
+        /**
+         * Deletes the VAO, freeing up associated resources in the GPU.
+         */
+        void Delete()
+        { glDeleteVertexArrays(1, &this->ID); }
+
+      private:
+        GLuint ID;
+    };
   };
 }
 
