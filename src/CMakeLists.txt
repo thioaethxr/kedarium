@@ -4,6 +4,7 @@ add_library(
   Constants.cpp
   Core.cpp
   File.cpp
+  Graphics.cpp
 )
 
 # Include Directory

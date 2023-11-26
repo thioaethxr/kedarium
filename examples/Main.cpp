@@ -5,6 +5,7 @@
 
 #include "Kedarium/Core.hpp"
 #include "Kedarium/File.hpp"
+#include "Kedarium/Graphics.hpp"
 
 // Constants
 constexpr unsigned int WINDOW_WIDTH  {800};
@@ -46,6 +47,7 @@ int main()
     return -1;
   }
   glfwMakeContextCurrent(window);
+  glPointSize(5.f);
 
   // Initializing GLEW
   GLenum glewErr = glewInit();
@@ -154,6 +156,20 @@ int main()
   while (!glfwWindowShouldClose(window))
   {
     glfwPollEvents();
+
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
+    {
+      kdr::gfx::usePointMode();
+    }
+    else if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
+    {
+      kdr::gfx::useLineMode();
+    }
+    else if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+    {
+      kdr::gfx::useFillMode();
+    }
+
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO);
