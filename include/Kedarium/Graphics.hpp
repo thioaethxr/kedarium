@@ -64,6 +64,48 @@ namespace kdr
       private:
         GLuint ID;
     };
+
+    /**
+     * Element Buffer Object (EBO) class for handling index data.
+     */
+    class EBO
+    {
+      public:
+        /**
+         * Constructs an EBO with the given index data and size.
+         *
+         * @param indices An array of GLuint representing the index data.
+         * @param size The size of the index data in bytes.
+         */
+        EBO(GLuint indices[], GLsizeiptr size);
+
+        /**
+         * Gets the ID of the EBO.
+         *
+         * @return The OpenGL identifier (ID) of the EBO.
+         */
+        const GLuint getID() const
+        { return this->ID; }
+
+        /**
+         * Binds the EBO to the OpenGL context.
+         */
+        void Bind()
+        { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ID); }
+        /**
+         * Unbinds the currently bound EBO from the OpenGL context
+         */
+        void Unbind()
+        { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
+        /**
+         * Deletes the EBO, freeing up associated resources in the GPU.
+         */
+        void Delete()
+        { glDeleteBuffers(1, &this->ID); }
+
+      private:
+        GLuint ID;
+    };
   };
 }
 

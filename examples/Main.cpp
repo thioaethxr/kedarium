@@ -113,14 +113,13 @@ int main()
   // VAO, VBO, and EBO
   GLuint VAO;
   kdr::gfx::VBO VBO1 {vertices, sizeof(vertices)};
-  GLuint EBO;
+  kdr::gfx::EBO EBO1 {indices, sizeof(indices)};
 
   glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &EBO);
 
   glBindVertexArray(VAO);
   VBO1.Bind();
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+  EBO1.Bind();
 
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -179,7 +178,7 @@ int main()
 
   glDeleteVertexArrays(1, &VAO);
   VBO1.Delete();
-  glDeleteBuffers(1, &EBO);
+  EBO1.Delete();
   glDeleteProgram(shaderProgram);
   glfwDestroyWindow(window);
   glfwTerminate();
