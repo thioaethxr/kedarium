@@ -4,7 +4,6 @@
 #include <string>
 
 #include "Kedarium/Core.hpp"
-#include "Kedarium/File.hpp"
 #include "Kedarium/Keys.hpp"
 #include "Kedarium/Graphics.hpp"
 
@@ -67,48 +66,11 @@ int main()
   GLclampf alpha {0.f};
   glClearColor(red, green, blue, alpha);
 
-  // Shader Sources
-  const std::string vertexShaderSource = kdr::file::getContents("resources/Shaders/default.vert");
-  const std::string fragmentShaderSource = kdr::file::getContents("resources/Shaders/default.frag");
-
-  const char* vertexShaderSourceC = vertexShaderSource.c_str();
-  const char* fragmentShaderSourceC = fragmentShaderSource.c_str();
-
-  // Vertex and Fragment Shaders
-  GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-  glShaderSource(vertexShader, 1, &vertexShaderSourceC, NULL);
-  glShaderSource(fragmentShader, 1, &fragmentShaderSourceC, NULL);
-
-  glCompileShader(vertexShader);
-  glCompileShader(fragmentShader);
-
-  // Validating the Shaders
-  int success;
-  char infoLog[512];
-
-  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-  if (!success)
-  {
-    glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-    std::cerr << "Failed to compile the vertex shader!\n";
-    std::cerr << "Error: " << infoLog << '\n';
-  }
-
-  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-  if (!success)
-  {
-    glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-    std::cerr << "Failed to compile the fragment shader!\n";
-    std::cerr << "Error: " << infoLog << '\n';
-  }
-
   // Shader Program
-  GLuint shaderProgram = glCreateProgram();
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
-  glLinkProgram(shaderProgram);
+  kdr::gfx::Shader defaultShader {
+    "resources/Shaders/default.vert",
+    "resources/Shaders/default.frag"
+  };
 
   // VAO, VBO, and EBO
   kdr::gfx::VAO VAO1;
@@ -125,19 +87,6 @@ int main()
   VAO1.Unbind();
   VBO1.Unbind();
   EBO1.Unbind();
-
-  // Validating the Shader Program
-  glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-  if (!success)
-  {
-    glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-    std::cerr << "Failed to link the shader program!\n";
-    std::cerr << "Error: " << infoLog << '\n';
-  }
-
-  // Deleting the Shaders
-  glDeleteShader(vertexShader);
-  glDeleteShader(fragmentShader);
 
   // Engine and Version info
   kdr::core::printEngineInfo();
@@ -163,7 +112,7 @@ int main()
     }
 
     glClear(GL_COLOR_BUFFER_BIT);
-    glUseProgram(shaderProgram);
+    defaultShader.Use();
     VAO1.Bind();
     glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
     glfwSwapBuffers(window);
@@ -172,7 +121,7 @@ int main()
   VAO1.Delete();
   VBO1.Delete();
   EBO1.Delete();
-  glDeleteProgram(shaderProgram);
+  defaultShader.Delete();
   glfwDestroyWindow(window);
   glfwTerminate();
   return 0;

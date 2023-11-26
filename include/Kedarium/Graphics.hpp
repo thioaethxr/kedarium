@@ -2,6 +2,9 @@
 #define KDR_GRAPHICS_HPP
 
 #include <GL/glew.h>
+#include <iostream>
+
+#include "File.hpp"
 
 namespace kdr
 {
@@ -22,6 +25,43 @@ namespace kdr
      */
     inline void useFillMode()
     { glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); }
+
+    /**
+     * Shader class for handling vertex and fragment shaders.
+     */
+    class Shader
+    {
+      public:
+        /**
+         * Constructs a Shader with the given vertex and fragment shader file paths.
+         *
+         * @param vertexPath The file path to the vertex shader.
+         * @param fragmentPath The file path to the fragment shader.
+         */
+        Shader(const std::string& vertexPath, const std::string& fragmentPath);
+
+        /**
+         * Gets the ID of the shader program.
+         *
+         * @return The OpenGL identifier (ID) of the shader program.
+         */
+        const GLuint getID() const
+        { return this->ID; }
+
+        /**
+         * Uses the shader program.
+         */
+        void Use()
+        { glUseProgram(this->ID); }
+        /**
+         * Deletes the shader program, freeing up associated resources in the GPU.
+         */
+        void Delete()
+        { glDeleteProgram(this->ID); }
+
+      private:
+        GLuint ID;
+    };
 
     /**
      * Vertex Buffer Object (VBO) class for handling vertex data.
