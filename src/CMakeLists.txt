@@ -3,6 +3,7 @@ add_library(
   Kedarium
   Constants.cpp
   Core.cpp
+  File.cpp
 )
 
 # Include Directory

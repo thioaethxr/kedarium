@@ -4,31 +4,12 @@
 #include <string>
 
 #include "Kedarium/Core.hpp"
+#include "Kedarium/File.hpp"
 
 // Constants
 constexpr unsigned int WINDOW_WIDTH  {800};
 constexpr unsigned int WINDOW_HEIGHT {600};
 const     std::string  WINDOW_TITLE  {"GLFW"};
-
-// Shader Sources
-const char* vertexShaderSource =
-  "#version 330 core\n"
-  "layout (location = 0) in vec3 aPos;\n"
-  "layout (location = 1) in vec3 aCol;\n"
-  "out vec3 vertCol;\n"
-  "void main()\n"
-  "{\n"
-  "  gl_Position = vec4(aPos, 1.f);\n"
-  "  vertCol = aCol;\n"
-  "}\n";
-const char* fragmentShaderSource =
-  "#version 330 core\n"
-  "in vec3 vertCol;\n"
-  "out vec4 FragColor;\n"
-  "void main()\n"
-  "{\n"
-  "  FragColor = vec4(vertCol, 1.f);\n"
-  "}\n";
 
 // Vertices and Indices
 GLfloat vertices[] = {
@@ -83,12 +64,19 @@ int main()
   GLclampf alpha {0.f};
   glClearColor(red, green, blue, alpha);
 
+  // Shader Sources
+  const std::string vertexShaderSource = kdr::file::getContents("resources/Shaders/default.vert");
+  const std::string fragmentShaderSource = kdr::file::getContents("resources/Shaders/default.frag");
+
+  const char* vertexShaderSourceC = vertexShaderSource.c_str();
+  const char* fragmentShaderSourceC = fragmentShaderSource.c_str();
+
   // Vertex and Fragment Shaders
   GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
   GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+  glShaderSource(vertexShader, 1, &vertexShaderSourceC, NULL);
+  glShaderSource(fragmentShader, 1, &fragmentShaderSourceC, NULL);
 
   glCompileShader(vertexShader);
   glCompileShader(fragmentShader);
