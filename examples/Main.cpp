@@ -5,6 +5,7 @@
 
 #include "Kedarium/Core.hpp"
 #include "Kedarium/File.hpp"
+#include "Kedarium/Keys.hpp"
 #include "Kedarium/Graphics.hpp"
 
 // Constants
@@ -157,15 +158,15 @@ int main()
   {
     glfwPollEvents();
 
-    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
+    if (kdr::Keys::isPressed(window, kdr::Key::C))
     {
       kdr::gfx::usePointMode();
     }
-    else if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
+    else if (kdr::Keys::isPressed(window, kdr::Key::V))
     {
       kdr::gfx::useLineMode();
     }
-    else if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+    else if (kdr::Keys::isPressed(window, kdr::Key::B))
     {
       kdr::gfx::useFillMode();
     }
