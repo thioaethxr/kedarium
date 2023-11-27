@@ -6,6 +6,8 @@
 #include <iostream>
 #include <string>
 
+#include "Color.hpp"
+
 namespace kdr
 {
   /**
@@ -100,6 +102,22 @@ namespace kdr
       { return this->glfwWindow; }
 
       /**
+       * Sets the clear color for the window.
+       *
+       * @param clearColor The RGBA color to set as the clear color.
+       */
+      void setClearColor(const kdr::Color::RGBA& clearColor)
+      {
+        this->clearColor = clearColor;
+        glClearColor(
+          clearColor.red,
+          clearColor.green,
+          clearColor.blue,
+          clearColor.alpha
+        );
+      }
+
+      /**
        * Stars the main loop function for the window.
        */
       void loop();
@@ -128,6 +146,8 @@ namespace kdr
       std::string  title  {"Kedarium"};
 
       GLFWwindow* glfwWindow {NULL};
+
+      kdr::Color::RGBA clearColor = kdr::Color::Black;
 
       /**
        * Initializes GLFW.

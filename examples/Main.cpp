@@ -85,22 +85,13 @@ class MainWindow : public kdr::Window
 
 int main()
 {
-  // Window
   MainWindow mainWindow {{
     WINDOW_WIDTH,
     WINDOW_HEIGHT,
     WINDOW_TITLE
   }};
 
-  // Clear Color
-  kdr::Color::RGBA clearColor {"#ffffff", 1.f};
-  glClearColor(
-    clearColor.red,
-    clearColor.green,
-    clearColor.blue,
-    clearColor.alpha
-  );
-
+  mainWindow.setClearColor(kdr::Color::Red);
   mainWindow.setup();
   mainWindow.loop();
 
