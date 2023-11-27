@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Kedarium/Core.hpp"
+#include "Kedarium/Color.hpp"
 #include "Kedarium/Keys.hpp"
 #include "Kedarium/Graphics.hpp"
 #include "Kedarium/Window.hpp"
@@ -84,19 +85,21 @@ class MainWindow : public kdr::Window
 
 int main()
 {
-  // Clear Color
-  GLclampf red   {0.f};
-  GLclampf green {0.f};
-  GLclampf blue  {0.f};
-  GLclampf alpha {0.f};
-  glClearColor(red, green, blue, alpha);
-
   // Window
   MainWindow mainWindow {{
     WINDOW_WIDTH,
     WINDOW_HEIGHT,
     WINDOW_TITLE
   }};
+
+  // Clear Color
+  kdr::Color::RGBA clearColor {"#ffffff", 1.f};
+  glClearColor(
+    clearColor.red,
+    clearColor.green,
+    clearColor.blue,
+    clearColor.alpha
+  );
 
   mainWindow.setup();
   mainWindow.loop();
