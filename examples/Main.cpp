@@ -8,6 +8,8 @@
 #include "Kedarium/Keys.hpp"
 #include "Kedarium/Graphics.hpp"
 #include "Kedarium/Window.hpp"
+#include "Kedarium/Space.hpp"
+#include "Kedarium/Debug.hpp"
 
 // Constants
 constexpr unsigned int WINDOW_WIDTH  {800};
@@ -37,6 +39,14 @@ class MainWindow : public kdr::Window
       kdr::core::printEngineInfo();
       std::cout << '\n';
       kdr::core::printVersionInfo();
+
+      kdr::space::Vec3 vecA {5.f, 3.f, 2.f};
+      kdr::space::Vec3 vecB {3.f, 1.f, 6.f};
+      kdr::space::Vec3 vecC = vecA + vecB;
+      kdr::space::Vec3 vecD = vecA - vecB;
+
+      kdr::debug::printVector(vecC);
+      kdr::debug::printVector(vecD);
 
       this->VAO1.Bind();
       this->VBO1.Bind();
@@ -91,7 +101,7 @@ int main()
     WINDOW_TITLE
   }};
 
-  mainWindow.setClearColor(kdr::Color::Red);
+  mainWindow.setClearColor(kdr::Color::Black);
   mainWindow.setup();
   mainWindow.loop();
 
