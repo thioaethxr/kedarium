@@ -13,3 +13,8 @@ void kdr::core::printVersionInfo()
   std::cout << "GLEW:   " << glewGetString(GLEW_VERSION) << '\n';
   std::cout << "GLFW:   " << glfwGetVersionString() << '\n';
 }
+
+void kdr::core::terminate()
+{
+  glfwTerminate();
+}

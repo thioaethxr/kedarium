@@ -23,6 +23,10 @@ namespace kdr
      * Prints version information about OpenGL, GLEW, and GLFW.
      */
     void printVersionInfo();
+    /**
+     * Terminates the engine.
+     */
+    void terminate();
   }
 }
 
