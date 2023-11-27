@@ -16,6 +16,12 @@ constexpr unsigned int WINDOW_WIDTH  {800};
 constexpr unsigned int WINDOW_HEIGHT {600};
 const     std::string  WINDOW_TITLE  {"GLFW"};
 
+// Camera Settings
+constexpr float CAMERA_FOV    {60.f};
+constexpr float CAMERA_ASPECT {(float)WINDOW_WIDTH / WINDOW_HEIGHT};
+constexpr float CAMERA_NEAR   {0.1f};
+constexpr float CAMERA_FAR    {100.f};
+
 // Vertices and Indices
 GLfloat vertices[] = {
   -0.5f, -0.5f, 0.f, 1.f, 1.f, 1.f,
@@ -39,17 +45,6 @@ class MainWindow : public kdr::Window
       kdr::core::printEngineInfo();
       std::cout << '\n';
       kdr::core::printVersionInfo();
-
-      kdr::space::Vec3 vecA {5.f, 3.f, 2.f};
-      kdr::space::Vec3 vecB {3.f, 1.f, 6.f};
-      kdr::space::Vec3 vecC = vecA + vecB;
-      kdr::space::Vec3 vecD = vecA - vecB;
-
-      kdr::space::Mat4 matA {1.f};
-      kdr::debug::printMatrix(matA);
-
-      kdr::debug::printVector(vecC);
-      kdr::debug::printVector(vecD);
 
       this->VAO1.Bind();
       this->VBO1.Bind();
@@ -83,6 +78,30 @@ class MainWindow : public kdr::Window
     {
       this->defaultShader.Use();
       this->VAO1.Bind();
+
+      kdr::space::Mat4 model {1.f};
+      kdr::space::Mat4 view  {1.f};
+      kdr::space::Mat4 proj  {1.f};
+
+      view = kdr::space::translate(
+        view,
+        {0.f, 0.f, -3.f}
+      );
+      proj = kdr::space::perspective(
+        CAMERA_FOV,
+        CAMERA_ASPECT,
+        CAMERA_NEAR,
+        CAMERA_FAR
+      );
+
+      GLuint modelLoc = glGetUniformLocation(this->defaultShader.getID(), "model");
+      GLuint viewLoc = glGetUniformLocation(this->defaultShader.getID(), "view");
+      GLuint projLoc = glGetUniformLocation(this->defaultShader.getID(), "proj");
+
+      glUniformMatrix4fv(modelLoc, 1, GL_FALSE, kdr::space::valuePointer(model));
+      glUniformMatrix4fv(viewLoc, 1, GL_FALSE, kdr::space::valuePointer(view));
+      glUniformMatrix4fv(projLoc, 1, GL_FALSE, kdr::space::valuePointer(proj));
+
       glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
     }
 

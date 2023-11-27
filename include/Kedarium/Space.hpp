@@ -1,12 +1,27 @@
 #ifndef KDR_SPACE_HPP
 #define KDR_SPACE_HPP
 
+#include <math.h>
 #include <cstring>
 
 namespace kdr
 {
   namespace space
   {
+    /**
+     * Constant representing the mathematical constant PI.
+     */
+    const float PI {3.141593f};
+
+    /**
+     * Converts degrees to radians.
+     *
+     * @param degrees The angle in degrees to be converted.
+     * @return The equivalent angle in radians.
+     */
+    inline float radians(const float degrees)
+    { return degrees * 180 / kdr::space::PI; }
+
     class Vec3
     {
       public:
@@ -117,8 +132,26 @@ namespace kdr
      * @param mat The matrix for which the pointer is obtained.
      * @return A pointer to the first element of the matrix data.
      */
-    const float* valuePointer(const kdr::space::Mat4& mat)
+    inline const float* valuePointer(const kdr::space::Mat4& mat)
     { return &mat[0][0]; }
+    /**
+     * Translates a 4x4 matrix by a 3D vector.
+     *
+     * @param mat The input 4x4 matrix.
+     * @param vec The translation vector.
+     * @return The resulting translated matrix.
+     */
+    kdr::space::Mat4 translate(const kdr::space::Mat4& mat, const kdr::space::Vec3& vec);
+    /**
+     * Creates a perspective projection matrix.
+     *
+     * @param fov The field of view angle in degrees.
+     * @param aspect The aspect ratio of the viewport (width/height).
+     * @param near The distance to the near clipping plane.
+     * @param far The distance to the far clipping plane.
+     * @return The resulting perspective projection matrix.
+     */
+    kdr::space::Mat4 perspective(const float fov, const float aspect, const float near, const float far);
   }
 }
 

@@ -77,21 +77,21 @@ namespace kdr
        *
        * @return The width of the window.
        */
-      const unsigned int getWidth() const
+      unsigned int getWidth() const
       { return this->width; }
       /**
        * Gets the height of the window.
        *
        * @return The height of the window.
        */
-      const unsigned int getHeight() const
+      unsigned int getHeight() const
       { return this->height; }
       /**
        * Gets the title of the window.
        *
        * @return The title of the window.
        */
-      const std::string getTitle() const
+      std::string getTitle() const
       { return this->title; }
       /**
        * Gets the GLFW window handle.
@@ -154,25 +154,25 @@ namespace kdr
        *
        * @return True if initialization is successful, false otherwise.
        */
-      const bool _initializeGlfw();
+      bool _initializeGlfw();
       /**
        * Initializes the window.
        *
        * @return True if initialization is successful, false otherwise.
        */
-      const bool _initializeWindow();
+      bool _initializeWindow();
       /**
        * Initializes GLEW.
        *
        * @return True if initialization is successful, false otherwise.
        */
-      const bool _initializeGlew();
+      bool _initializeGlew();
       /**
        * Initializes OpenGL settings.
        * 
        * @return True if initialization is successful, false otherwise.
        */
-      const bool _initializeOpenGLSettings();
+      bool _initializeOpenGLSettings();
       /**
        * Overall initialization function.
        */

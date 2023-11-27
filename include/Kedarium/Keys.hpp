@@ -48,7 +48,7 @@ namespace kdr
      * @param key The key to check.
      * @return True if the key is pressed, false otherwise.
      */
-    inline const bool isPressed(GLFWwindow* window, const kdr::Key& key)
+    inline bool isPressed(GLFWwindow* window, const kdr::Key& key)
     {
       return glfwGetKey(window, key) == GLFW_PRESS;
     }

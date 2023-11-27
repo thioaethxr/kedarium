@@ -19,7 +19,7 @@ void kdr::Window::close()
   glfwSetWindowShouldClose(this->glfwWindow, GLFW_TRUE);
 }
 
-const bool kdr::Window::_initializeGlfw()
+bool kdr::Window::_initializeGlfw()
 {
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -28,7 +28,7 @@ const bool kdr::Window::_initializeGlfw()
   return true;
 }
 
-const bool kdr::Window::_initializeWindow()
+bool kdr::Window::_initializeWindow()
 {
   this->glfwWindow = glfwCreateWindow(
     this->width,
@@ -46,7 +46,7 @@ const bool kdr::Window::_initializeWindow()
   return true;
 }
 
-const bool kdr::Window::_initializeGlew()
+bool kdr::Window::_initializeGlew()
 {
   GLenum glewErr = glewInit();
   if (GLEW_OK != glewErr)
@@ -58,7 +58,7 @@ const bool kdr::Window::_initializeGlew()
   return true;
 }
 
-const bool kdr::Window::_initializeOpenGLSettings()
+bool kdr::Window::_initializeOpenGLSettings()
 {
   glPointSize(5.f);
   return true;

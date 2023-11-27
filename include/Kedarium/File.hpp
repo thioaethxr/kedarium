@@ -16,7 +16,7 @@ namespace kdr
      * @param path The path to the file to be read.
      * @return A string containing the contents of the file.
      */
-    const std::string getContents(const std::string& path);
+    std::string getContents(const std::string& path);
   }
 }
 

@@ -45,7 +45,7 @@ namespace kdr
          *
          * @return The OpenGL identifier (ID) of the shader program.
          */
-        const GLuint getID() const
+        GLuint getID() const
         { return this->ID; }
 
         /**
@@ -82,7 +82,7 @@ namespace kdr
          *
          * @return The OpenGL identifier (ID) of the VBO.
          */
-        const GLuint getID() const
+        GLuint getID() const
         { return this->ID; }
 
         /**
@@ -124,7 +124,7 @@ namespace kdr
          *
          * @return The OpenGL identifier (ID) of the EBO.
          */
-        const GLuint getID() const
+        GLuint getID() const
         { return this->ID; }
 
         /**
@@ -164,7 +164,7 @@ namespace kdr
          *
          * @return The OpenGL identifier (ID) of the VAO.
          */
-        const GLuint getID() const
+        GLuint getID() const
         { return this->ID; }
 
         /**
