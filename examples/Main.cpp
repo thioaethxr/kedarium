@@ -45,6 +45,9 @@ class MainWindow : public kdr::Window
       kdr::space::Vec3 vecC = vecA + vecB;
       kdr::space::Vec3 vecD = vecA - vecB;
 
+      kdr::space::Mat4 matA {1.f};
+      kdr::debug::printMatrix(matA);
+
       kdr::debug::printVector(vecC);
       kdr::debug::printVector(vecD);
 

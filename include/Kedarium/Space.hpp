@@ -1,6 +1,8 @@
 #ifndef KDR_SPACE_HPP
 #define KDR_SPACE_HPP
 
+#include <cstring>
+
 namespace kdr
 {
   namespace space
@@ -60,6 +62,63 @@ namespace kdr
           );
         }
     };
+
+    /**
+     * 4x4 matrix class for representing transformations in 3D space.
+     */
+    class Mat4
+    {
+      public:
+        /**
+         * Default constructor. Initializes the matrix to the zero matrix.
+         */
+        Mat4()
+        {
+          memset(this->elements, 0.f, sizeof(this->elements));
+        }
+        /**
+         * Constructs a diagonal matrix with the specified diagonal number.
+         *
+         * @param diagonalNumber The value to set on the diagonal elements.
+         */
+        Mat4(const float diagonalNumber)
+        {
+          memset(this->elements, 0.f, sizeof(this->elements));
+          for (int i = 0; i < 4; i++)
+          {
+            this->elements[i][i] = diagonalNumber;
+          }
+        }
+
+        /**
+         * Overloaded indexing operator for accessing matrix elements.
+         *
+         * @param i The row index.
+         * @return A pointer to the specified row of matrix elements.
+         */
+        float* operator[](int i)
+        { return this->elements[i]; }
+        /**
+         * Overloaded const indexing operator for accessing matrix elements.
+         *
+         * @param i The row index.
+         * @return A const pointer to the specified row of matrix elements.
+         */
+        const float* operator[](int i) const
+        { return this->elements[i]; }
+
+      private:
+        float elements[4][4];
+    };
+
+    /**
+     * Gets a pointer to the first element of the matrix data.
+     *
+     * @param mat The matrix for which the pointer is obtained.
+     * @return A pointer to the first element of the matrix data.
+     */
+    const float* valuePointer(const kdr::space::Mat4& mat)
+    { return &mat[0][0]; }
   }
 }
 

@@ -18,6 +18,22 @@ namespace kdr
     {
       std::cout << "X: " << vec.x << "; Y: " << vec.y << "; Z: " << vec.z << '\n';
     }
+    /**
+     * Prints the elements of a 4x4 matrix to the console.
+     *
+     * @param mat The 4x4 matrix to be printed.
+     */
+    inline void printMatrix(const kdr::space::Mat4& mat)
+    {
+      for (int i = 0; i < 4; i++)
+      {
+        for (int j = 0; j < 4; j++)
+        {
+          std::cout << mat[i][j] << ' ';
+        }
+        std::cout << '\n';
+      }
+    }
   }
 }
 
