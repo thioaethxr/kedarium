@@ -7,7 +7,11 @@ void kdr::Camera::updateMatrix()
 
   view = kdr::space::translate(
     view,
-    {0.f, 0.f, -3.f}
+    {
+      this->position.x,
+      this->position.y,
+      this->position.z
+    }
   );
   proj = kdr::space::perspective(
     this->fov,
@@ -23,4 +27,32 @@ void kdr::Camera::applyMatrix(const GLuint shaderID, const std::string& uniformN
 {
   GLuint cameraMatrixLoc = glGetUniformLocation(shaderID, uniformName.c_str());
   glUniformMatrix4fv(cameraMatrixLoc, 1, GL_FALSE, kdr::space::valuePointer(this->matrix));
+}
+
+void kdr::Camera::handleMovement(GLFWwindow* window)
+{
+  if (kdr::keys::isPressed(window, kdr::Key::W))
+  {
+    this->position -= this->front * this->speed;
+  }
+  if (kdr::keys::isPressed(window, kdr::Key::S))
+  {
+    this->position += this->front * this->speed;
+  }
+  if (kdr::keys::isPressed(window, kdr::Key::A))
+  {
+    this->position -= kdr::space::cross(this->front, this->up) * this->speed;
+  }
+  if (kdr::keys::isPressed(window, kdr::Key::D))
+  {
+    this->position += kdr::space::cross(this->front, this->up) * this->speed;
+  }
+  if (kdr::keys::isPressed(window, kdr::Key::Space))
+  {
+    this->position += this->up * this->speed;
+  }
+  if (kdr::keys::isPressed(window, kdr::Key::LeftShift))
+  {
+    this->position -= this->up * this->speed;
+  }
 }

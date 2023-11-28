@@ -22,6 +22,9 @@ namespace kdr
     inline float radians(const float degrees)
     { return degrees * 180 / kdr::space::PI; }
 
+    /**
+     * 3D vector class representing a point or direction in 3D space.
+     */
     class Vec3
     {
       public:
@@ -75,6 +78,46 @@ namespace kdr
             this->y - vec.y,
             this->z - vec.z
           );
+        }
+        /**
+         * Multiplies a 3D vector by a scalar.
+         *
+         * @param scalar The scalar value to multiply the vector by.
+         * @return The resulting vector after multiplication.
+         */
+        Vec3 operator*(float scalar)
+        {
+          return Vec3(
+            this->x * scalar,
+            this->y * scalar,
+            this->z * scalar
+          );
+        }
+        /**
+         * Adds another 3D vector to the current vector in-place.
+         *
+         * @param vec The vector to be added.
+         * @return Reference to the modified current vector.
+         */
+        Vec3& operator+=(const Vec3& vec)
+        {
+          this->x += vec.x;
+          this->y += vec.y;
+          this->z += vec.z;
+          return *this;
+        }
+        /**
+         * Subtracts another 3D vector from the current vector in-place.
+         *
+         * @param vec The vector to be subtracted.
+         * @return Reference to the modified current vector.
+         */
+        Vec3& operator-=(const Vec3& vec)
+        {
+          this->x -= vec.x;
+          this->y -= vec.y;
+          this->z -= vec.z;
+          return *this;
         }
     };
 
@@ -143,6 +186,31 @@ namespace kdr
       private:
         float elements[4][4];
     };
+
+    /**
+     * Computes the dot product of two 3D vectors.
+     *
+     * @param vecA The first 3D vector.
+     * @param vecB The second 3D vector.
+     * @return The dot product of the two vectors.
+     */
+    inline float dot(const kdr::space::Vec3& vecA, const kdr::space::Vec3& vecB)
+    { return vecA.x * vecB.x + vecA.y * vecB.y + vecA.z * vecB.z; }
+    /**
+     * Computes the cross product of two 3D vectors.
+     *
+     * @param vecA The first 3D vector.
+     * @param vecB The second 3D vector.
+     * @return The cross product of the two vectors.
+     */
+    inline kdr::space::Vec3 cross(const kdr::space::Vec3& vecA, const kdr::space::Vec3& vecB)
+    {
+      return kdr::space::Vec3 {
+        vecA.y * vecB.z - vecA.z * vecB.y,
+        vecA.z * vecB.x - vecA.x * vecB.z,
+        vecA.x * vecB.y - vecA.y * vecB.x
+      };
+    }
 
     /**
      * Gets a pointer to the first element of the matrix data.

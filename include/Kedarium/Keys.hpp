@@ -37,9 +37,11 @@ namespace kdr
     X = GLFW_KEY_X,
     Y = GLFW_KEY_Y,
     Z = GLFW_KEY_Z,
+    Space = GLFW_KEY_SPACE,
+    LeftShift = GLFW_KEY_LEFT_SHIFT,
   };
 
-  namespace Keys
+  namespace keys
   {
     /**
      * Checks if a specific key is currently pressed.

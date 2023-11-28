@@ -21,7 +21,7 @@ constexpr float CAMERA_FOV         {60.f};
 constexpr float CAMERA_ASPECT      {(float)WINDOW_WIDTH / WINDOW_HEIGHT};
 constexpr float CAMERA_NEAR        {0.1f};
 constexpr float CAMERA_FAR         {100.f};
-constexpr float CAMERA_SPEED       {100.f};
+constexpr float CAMERA_SPEED       {0.1f};
 constexpr float CAMERA_SENSITIVITY {100.f};
 
 // Vertices and Indices
@@ -62,15 +62,15 @@ class MainWindow : public kdr::Window
 
     void update()
     {
-      if (kdr::Keys::isPressed(this->getGlfwWindow(), kdr::Key::C))
+      if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::C))
       {
         kdr::gfx::usePointMode();
       }
-      else if (kdr::Keys::isPressed(this->getGlfwWindow(), kdr::Key::V))
+      else if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::V))
       {
         kdr::gfx::useLineMode();
       }
-      else if (kdr::Keys::isPressed(this->getGlfwWindow(), kdr::Key::B))
+      else if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::B))
       {
         kdr::gfx::useFillMode();
       }

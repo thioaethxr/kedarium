@@ -2,8 +2,10 @@
 #define KDR_CAMERA_HPP
 
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <string>
 
+#include "Keys.hpp"
 #include "Space.hpp"
 
 namespace kdr
@@ -69,16 +71,25 @@ namespace kdr
        * @param uniformName The name of the uniform variable in the shader.
        */
       void applyMatrix(const GLuint shaderID, const std::string& uniformName);
+      /**
+       * Handles camera movement based on user input.
+       *
+       * @param window The GLFW window for input handling.
+       */
+      void handleMovement(GLFWwindow* window);
 
     private:
-      float fov;
-      float aspect;
-      float near;
-      float far;
-      float speed;
-      float sensitivity;
+      float fov         {60.f};
+      float aspect      {1.f};
+      float near        {0.1f};
+      float far         {100.f};
+      float speed       {1.f};
+      float sensitivity {12.f};
 
       kdr::space::Mat4 matrix;
+      kdr::space::Vec3 position {0.f,  0.f, -5.f};
+      kdr::space::Vec3 up       {0.f, -1.f,  0.f};
+      kdr::space::Vec3 front    {0.f,  0.f, -1.f};
   };
 }
 
