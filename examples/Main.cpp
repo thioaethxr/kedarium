@@ -78,12 +78,8 @@ class MainWindow : public kdr::Window
 
     void render()
     {
-      this->defaultShader.Use();
+      this->bindShader(this->defaultShader);
       this->VAO1.Bind();
-
-      this->mainCamera.updateMatrix();
-      this->mainCamera.applyMatrix(this->defaultShader.getID(), "cameraMatrix");
-
       glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
     }
 
@@ -95,26 +91,29 @@ class MainWindow : public kdr::Window
     kdr::gfx::VAO VAO1;
     kdr::gfx::VBO VBO1 {vertices, sizeof(vertices)};
     kdr::gfx::EBO EBO1 {indices, sizeof(indices)};
-
-    kdr::Camera mainCamera {{
-      CAMERA_FOV,
-      CAMERA_ASPECT,
-      CAMERA_NEAR,
-      CAMERA_FAR,
-      CAMERA_SPEED,
-      CAMERA_SENSITIVITY
-    }};
 };
 
 int main()
 {
+  // Window
   MainWindow mainWindow {{
     WINDOW_WIDTH,
     WINDOW_HEIGHT,
     WINDOW_TITLE
   }};
 
+  // Camera
+  kdr::Camera mainCamera {{
+    CAMERA_FOV,
+    CAMERA_ASPECT,
+    CAMERA_NEAR,
+    CAMERA_FAR,
+    CAMERA_SPEED,
+    CAMERA_SENSITIVITY
+  }};
+
   mainWindow.setClearColor(kdr::Color::Black);
+  mainWindow.setBoundCamera(&mainCamera);
   mainWindow.setup();
   mainWindow.loop();
 

@@ -79,9 +79,19 @@ void kdr::Window::_initialize()
   this->_initializeOpenGLSettings();
 }
 
+void kdr::Window::_updateBoundCamera()
+{
+  if (this->boundCamera == NULL) return;
+  if (this->boundShaderID == 0) return;
+
+  this->boundCamera->updateMatrix();
+  this->boundCamera->applyMatrix(this->boundShaderID, "cameraMatrix");
+}
+
 void kdr::Window::_update()
 {
   glfwPollEvents();
+  this->_updateBoundCamera();
   this->update();
 }
 

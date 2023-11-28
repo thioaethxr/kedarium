@@ -7,6 +7,8 @@
 #include <string>
 
 #include "Color.hpp"
+#include "Graphics.hpp"
+#include "Camera.hpp"
 
 namespace kdr
 {
@@ -100,6 +102,13 @@ namespace kdr
        */
       GLFWwindow* getGlfwWindow() const
       { return this->glfwWindow; }
+      /**
+       * Gets the currently bound camera.
+       *
+       * @return A pointer to the currently bound camera.
+       */
+      kdr::Camera* getBoundCamera() const
+      { return this->boundCamera; }
 
       /**
        * Sets the clear color for the window.
@@ -116,6 +125,13 @@ namespace kdr
           clearColor.alpha
         );
       }
+      /**
+       * Sets the camera to be used for rendering.
+       *
+       * @param camera A pointer to the camera to be used for rendering.
+       */
+      void setBoundCamera(kdr::Camera* camera)
+      { this->boundCamera = camera; }
 
       /**
        * Stars the main loop function for the window.
@@ -125,6 +141,16 @@ namespace kdr
        * Closes the window.
        */
       void close();
+      /**
+       * Binds a shader for rendering.
+       *
+       * @param shader The shader to be bound.
+       */
+      void bindShader(kdr::gfx::Shader& shader)
+      {
+        shader.Use();
+        this->boundShaderID = shader.getID();
+      }
 
     protected:
       /**
@@ -145,9 +171,11 @@ namespace kdr
       unsigned int height {600}; 
       std::string  title  {"Kedarium"};
 
-      GLFWwindow* glfwWindow {NULL};
-
+      GLFWwindow*      glfwWindow {NULL};
       kdr::Color::RGBA clearColor = kdr::Color::Black;
+
+      kdr::Camera* boundCamera   {NULL};
+      GLuint       boundShaderID {0};
 
       /**
        * Initializes GLFW.
@@ -177,6 +205,10 @@ namespace kdr
        * Overall initialization function.
        */
       void _initialize();
+      /**
+       * @brief Updates the currently bound camera.
+       */
+      void _updateBoundCamera();
       /**
        * Updates the window.
        */
