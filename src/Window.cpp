@@ -1,5 +1,10 @@
 #include "Kedarium/Window.hpp"
 
+void framebufferSizeCallback(GLFWwindow* window, int width, int height)
+{
+  glViewport(0, 0, width, height);
+}
+
 kdr::Window::~Window()
 {
   glfwDestroyWindow(this->glfwWindow);
@@ -43,6 +48,8 @@ bool kdr::Window::_initializeWindow()
     return false;
   }
   glfwMakeContextCurrent(this->glfwWindow);
+  glfwSetWindowUserPointer(this->glfwWindow, this);
+  glfwSetFramebufferSizeCallback(this->glfwWindow, framebufferSizeCallback);
   return true;
 }
 

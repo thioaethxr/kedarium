@@ -8,7 +8,7 @@
 #include "Kedarium/Keys.hpp"
 #include "Kedarium/Graphics.hpp"
 #include "Kedarium/Window.hpp"
-#include "Kedarium/Space.hpp"
+#include "Kedarium/Camera.hpp"
 #include "Kedarium/Debug.hpp"
 
 // Constants
@@ -17,10 +17,12 @@ constexpr unsigned int WINDOW_HEIGHT {600};
 const     std::string  WINDOW_TITLE  {"GLFW"};
 
 // Camera Settings
-constexpr float CAMERA_FOV    {60.f};
-constexpr float CAMERA_ASPECT {(float)WINDOW_WIDTH / WINDOW_HEIGHT};
-constexpr float CAMERA_NEAR   {0.1f};
-constexpr float CAMERA_FAR    {100.f};
+constexpr float CAMERA_FOV         {60.f};
+constexpr float CAMERA_ASPECT      {(float)WINDOW_WIDTH / WINDOW_HEIGHT};
+constexpr float CAMERA_NEAR        {0.1f};
+constexpr float CAMERA_FAR         {100.f};
+constexpr float CAMERA_SPEED       {100.f};
+constexpr float CAMERA_SENSITIVITY {100.f};
 
 // Vertices and Indices
 GLfloat vertices[] = {
@@ -79,28 +81,8 @@ class MainWindow : public kdr::Window
       this->defaultShader.Use();
       this->VAO1.Bind();
 
-      kdr::space::Mat4 model {1.f};
-      kdr::space::Mat4 view  {1.f};
-      kdr::space::Mat4 proj  {1.f};
-
-      view = kdr::space::translate(
-        view,
-        {0.f, 0.f, -3.f}
-      );
-      proj = kdr::space::perspective(
-        CAMERA_FOV,
-        CAMERA_ASPECT,
-        CAMERA_NEAR,
-        CAMERA_FAR
-      );
-
-      GLuint modelLoc = glGetUniformLocation(this->defaultShader.getID(), "model");
-      GLuint viewLoc = glGetUniformLocation(this->defaultShader.getID(), "view");
-      GLuint projLoc = glGetUniformLocation(this->defaultShader.getID(), "proj");
-
-      glUniformMatrix4fv(modelLoc, 1, GL_FALSE, kdr::space::valuePointer(model));
-      glUniformMatrix4fv(viewLoc, 1, GL_FALSE, kdr::space::valuePointer(view));
-      glUniformMatrix4fv(projLoc, 1, GL_FALSE, kdr::space::valuePointer(proj));
+      this->mainCamera.updateMatrix();
+      this->mainCamera.applyMatrix(this->defaultShader.getID(), "cameraMatrix");
 
       glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
     }
@@ -113,6 +95,15 @@ class MainWindow : public kdr::Window
     kdr::gfx::VAO VAO1;
     kdr::gfx::VBO VBO1 {vertices, sizeof(vertices)};
     kdr::gfx::EBO EBO1 {indices, sizeof(indices)};
+
+    kdr::Camera mainCamera {{
+      CAMERA_FOV,
+      CAMERA_ASPECT,
+      CAMERA_NEAR,
+      CAMERA_FAR,
+      CAMERA_SPEED,
+      CAMERA_SENSITIVITY
+    }};
 };
 
 int main()

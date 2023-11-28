@@ -177,7 +177,7 @@ namespace kdr
          * @param stride The byte offset between consecutive attributes.
          * @param offset The byte offset of the first component in the attribute.
          */
-        void LinkAttribute(VBO& VBO, GLuint layout, GLuint size, GLenum type, GLsizeiptr stride, const void* offset);
+        void LinkAttribute(kdr::gfx::VBO& VBO, GLuint layout, GLuint size, GLenum type, GLsizeiptr stride, const void* offset);
         /**
          * Binds the VAO to the OpenGL context.
          */
