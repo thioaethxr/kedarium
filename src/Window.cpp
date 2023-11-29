@@ -1,5 +1,16 @@
 #include "Kedarium/Window.hpp"
 
+void framebufferSizeCallback(GLFWwindow* window, int width, int height)
+{
+  kdr::Window* windowInstance = (kdr::Window*)glfwGetWindowUserPointer(window);
+  glViewport(0, 0, width, height);
+
+  if (windowInstance->getBoundCamera() == NULL) return;
+
+  const float aspect = (float)width / height;
+  windowInstance->getBoundCamera()->setAspect(aspect);
+}
+
 kdr::Window::~Window()
 {
   glfwDestroyWindow(this->glfwWindow);
@@ -19,7 +30,37 @@ void kdr::Window::close()
   glfwSetWindowShouldClose(this->glfwWindow, GLFW_TRUE);
 }
 
-const bool kdr::Window::_initializeGlfw()
+void kdr::Window::maximize()
+{
+  const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+  glfwSetWindowMonitor(
+    glfwWindow,
+    glfwGetPrimaryMonitor(),
+    0,
+    0,
+    mode->width,
+    mode->height,
+    GLFW_DONT_CARE
+  );
+  this->isFullscreenOn = true;
+}
+
+void kdr::Window::unmaximize()
+{
+  const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+  glfwSetWindowMonitor(
+    glfwWindow,
+    NULL,
+    mode->width  / 2 - 400,
+    mode->height / 2 - 300,
+    800,
+    600,
+    GLFW_DONT_CARE
+  );
+  this->isFullscreenOn = false;
+}
+
+bool kdr::Window::_initializeGlfw()
 {
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -28,7 +69,7 @@ const bool kdr::Window::_initializeGlfw()
   return true;
 }
 
-const bool kdr::Window::_initializeWindow()
+bool kdr::Window::_initializeWindow()
 {
   this->glfwWindow = glfwCreateWindow(
     this->width,
@@ -43,10 +84,12 @@ const bool kdr::Window::_initializeWindow()
     return false;
   }
   glfwMakeContextCurrent(this->glfwWindow);
+  glfwSetWindowUserPointer(this->glfwWindow, this);
+  glfwSetFramebufferSizeCallback(this->glfwWindow, framebufferSizeCallback);
   return true;
 }
 
-const bool kdr::Window::_initializeGlew()
+bool kdr::Window::_initializeGlew()
 {
   GLenum glewErr = glewInit();
   if (GLEW_OK != glewErr)
@@ -58,7 +101,7 @@ const bool kdr::Window::_initializeGlew()
   return true;
 }
 
-const bool kdr::Window::_initializeOpenGLSettings()
+bool kdr::Window::_initializeOpenGLSettings()
 {
   glPointSize(5.f);
   return true;
@@ -72,9 +115,21 @@ void kdr::Window::_initialize()
   this->_initializeOpenGLSettings();
 }
 
+void kdr::Window::_updateBoundCamera()
+{
+  if (this->boundCamera == NULL) return;
+  if (this->boundShaderID == 0) return;
+
+  this->boundCamera->handleMovement(this->glfwWindow);
+  this->boundCamera->handleMouseMovement(this->glfwWindow);
+  this->boundCamera->updateMatrix();
+  this->boundCamera->applyMatrix(this->boundShaderID, "cameraMatrix");
+}
+
 void kdr::Window::_update()
 {
   glfwPollEvents();
+  this->_updateBoundCamera();
   this->update();
 }
 

@@ -8,18 +8,28 @@
 #include "Kedarium/Keys.hpp"
 #include "Kedarium/Graphics.hpp"
 #include "Kedarium/Window.hpp"
+#include "Kedarium/Camera.hpp"
+#include "Kedarium/Debug.hpp"
 
 // Constants
 constexpr unsigned int WINDOW_WIDTH  {800};
 constexpr unsigned int WINDOW_HEIGHT {600};
 const     std::string  WINDOW_TITLE  {"GLFW"};
 
+// Camera Settings
+constexpr float CAMERA_FOV         {60.f};
+constexpr float CAMERA_ASPECT      {(float)WINDOW_WIDTH / WINDOW_HEIGHT};
+constexpr float CAMERA_NEAR        {0.1f};
+constexpr float CAMERA_FAR         {100.f};
+constexpr float CAMERA_SPEED       {0.1f};
+constexpr float CAMERA_SENSITIVITY {100.f};
+
 // Vertices and Indices
 GLfloat vertices[] = {
-  -0.5f, -0.5f, 0.f, 1.f, 1.f, 1.f,
-   0.5f, -0.5f, 0.f, 1.f, 1.f, 1.f,
-  -0.5f,  0.5f, 0.f, 1.f, 1.f, 1.f,
-   0.5f,  0.5f, 0.f, 1.f, 1.f, 1.f,
+  -0.5f, -0.5f, 0.f, 1.f, 1.f, 1.f, 0.f, 0.f,
+   0.5f, -0.5f, 0.f, 1.f, 1.f, 1.f, 1.f, 0.f,
+  -0.5f,  0.5f, 0.f, 1.f, 1.f, 1.f, 0.f, 1.f,
+   0.5f,  0.5f, 0.f, 1.f, 1.f, 1.f, 1.f, 1.f,
 };
 GLuint indices[] = {
   0, 1, 3,
@@ -31,6 +41,16 @@ class MainWindow : public kdr::Window
   public:
     using kdr::Window::Window;
 
+    ~MainWindow()
+    {
+      this->defaultShader.Delete();
+      this->concreteTexture.Delete();
+
+      this->VAO1.Delete();
+      this->VBO1.Delete();
+      this->EBO1.Delete();
+    }
+
     void setup()
     {
       // Engine and Version info
@@ -38,12 +58,15 @@ class MainWindow : public kdr::Window
       std::cout << '\n';
       kdr::core::printVersionInfo();
 
+      this->concreteTexture.TextureUnit(this->defaultShader.getID(), "tex0", 0);
+
       this->VAO1.Bind();
       this->VBO1.Bind();
       this->EBO1.Bind();
 
-      this->VAO1.LinkAttribute(this->VBO1, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)0);
-      this->VAO1.LinkAttribute(this->VBO1, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+      this->VAO1.LinkAttribute(this->VBO1, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)0);
+      this->VAO1.LinkAttribute(this->VBO1, 1, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+      this->VAO1.LinkAttribute(this->VBO1, 2, 2, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
 
       this->VAO1.Unbind();
       this->VBO1.Unbind();
@@ -52,15 +75,37 @@ class MainWindow : public kdr::Window
 
     void update()
     {
-      if (kdr::Keys::isPressed(this->getGlfwWindow(), kdr::Key::C))
+      if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::E))
+      {
+        this->getBoundCamera()->setIsMouseLocked(true);
+      }
+      else if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::Escape))
+      {
+        this->getBoundCamera()->setIsMouseLocked(false);
+      }
+
+      if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::F))
+      {
+        if (!this->pressingFullscreen)
+        {
+          this->isFullscreenOn ? this->unmaximize() : this->maximize();
+          this->pressingFullscreen = true;
+        }
+      }
+      else
+      {
+        this->pressingFullscreen = false;
+      }
+
+      if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::C))
       {
         kdr::gfx::usePointMode();
       }
-      else if (kdr::Keys::isPressed(this->getGlfwWindow(), kdr::Key::V))
+      else if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::V))
       {
         kdr::gfx::useLineMode();
       }
-      else if (kdr::Keys::isPressed(this->getGlfwWindow(), kdr::Key::B))
+      else if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::B))
       {
         kdr::gfx::useFillMode();
       }
@@ -68,8 +113,9 @@ class MainWindow : public kdr::Window
 
     void render()
     {
-      this->defaultShader.Use();
+      this->bindShader(this->defaultShader);
       this->VAO1.Bind();
+      this->concreteTexture.Bind();
       glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
     }
 
@@ -78,9 +124,18 @@ class MainWindow : public kdr::Window
       "resources/Shaders/default.vert",
       "resources/Shaders/default.frag"
     };
+    kdr::gfx::Texture concreteTexture {
+      "resources/Textures/concrete.png",
+      GL_TEXTURE_2D,
+      GL_TEXTURE0,
+      GL_RGBA,
+      GL_UNSIGNED_BYTE
+    };
     kdr::gfx::VAO VAO1;
     kdr::gfx::VBO VBO1 {vertices, sizeof(vertices)};
     kdr::gfx::EBO EBO1 {indices, sizeof(indices)};
+
+    bool pressingFullscreen {false};
 };
 
 int main()
@@ -92,15 +147,18 @@ int main()
     WINDOW_TITLE
   }};
 
-  // Clear Color
-  kdr::Color::RGBA clearColor {"#ffffff", 1.f};
-  glClearColor(
-    clearColor.red,
-    clearColor.green,
-    clearColor.blue,
-    clearColor.alpha
-  );
+  // Camera
+  kdr::Camera mainCamera {{
+    CAMERA_FOV,
+    CAMERA_ASPECT,
+    CAMERA_NEAR,
+    CAMERA_FAR,
+    CAMERA_SPEED,
+    CAMERA_SENSITIVITY
+  }};
 
+  mainWindow.setClearColor(kdr::Color::Black);
+  mainWindow.setBoundCamera(&mainCamera);
   mainWindow.setup();
   mainWindow.loop();
 

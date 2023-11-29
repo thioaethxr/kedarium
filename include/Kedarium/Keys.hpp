@@ -37,9 +37,12 @@ namespace kdr
     X = GLFW_KEY_X,
     Y = GLFW_KEY_Y,
     Z = GLFW_KEY_Z,
+    Escape = GLFW_KEY_ESCAPE,
+    Space = GLFW_KEY_SPACE,
+    LeftShift = GLFW_KEY_LEFT_SHIFT,
   };
 
-  namespace Keys
+  namespace keys
   {
     /**
      * Checks if a specific key is currently pressed.
@@ -48,7 +51,7 @@ namespace kdr
      * @param key The key to check.
      * @return True if the key is pressed, false otherwise.
      */
-    inline const bool isPressed(GLFWwindow* window, const kdr::Key& key)
+    inline bool isPressed(GLFWwindow* window, const kdr::Key& key)
     {
       return glfwGetKey(window, key) == GLFW_PRESS;
     }

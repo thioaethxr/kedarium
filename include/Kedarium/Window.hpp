@@ -6,6 +6,10 @@
 #include <iostream>
 #include <string>
 
+#include "Color.hpp"
+#include "Graphics.hpp"
+#include "Camera.hpp"
+
 namespace kdr
 {
   /**
@@ -75,21 +79,21 @@ namespace kdr
        *
        * @return The width of the window.
        */
-      const unsigned int getWidth() const
+      unsigned int getWidth() const
       { return this->width; }
       /**
        * Gets the height of the window.
        *
        * @return The height of the window.
        */
-      const unsigned int getHeight() const
+      unsigned int getHeight() const
       { return this->height; }
       /**
        * Gets the title of the window.
        *
        * @return The title of the window.
        */
-      const std::string getTitle() const
+      std::string getTitle() const
       { return this->title; }
       /**
        * Gets the GLFW window handle.
@@ -98,6 +102,36 @@ namespace kdr
        */
       GLFWwindow* getGlfwWindow() const
       { return this->glfwWindow; }
+      /**
+       * Gets the currently bound camera.
+       *
+       * @return A pointer to the currently bound camera.
+       */
+      kdr::Camera* getBoundCamera() const
+      { return this->boundCamera; }
+
+      /**
+       * Sets the clear color for the window.
+       *
+       * @param clearColor The RGBA color to set as the clear color.
+       */
+      void setClearColor(const kdr::Color::RGBA& clearColor)
+      {
+        this->clearColor = clearColor;
+        glClearColor(
+          clearColor.red,
+          clearColor.green,
+          clearColor.blue,
+          clearColor.alpha
+        );
+      }
+      /**
+       * Sets the camera to be used for rendering.
+       *
+       * @param camera A pointer to the camera to be used for rendering.
+       */
+      void setBoundCamera(kdr::Camera* camera)
+      { this->boundCamera = camera; }
 
       /**
        * Stars the main loop function for the window.
@@ -107,8 +141,28 @@ namespace kdr
        * Closes the window.
        */
       void close();
+      /**
+       * Maximizes the window.
+       */
+      void maximize();
+      /**
+       * Unmaximizes the window.
+       */
+      void unmaximize();
+      /**
+       * Binds a shader for rendering.
+       *
+       * @param shader The shader to be bound.
+       */
+      void bindShader(kdr::gfx::Shader& shader)
+      {
+        shader.Use();
+        this->boundShaderID = shader.getID();
+      }
 
     protected:
+      bool isFullscreenOn {false};
+
       /**
        * Pure virtual function for setting up the window.
        */
@@ -127,36 +181,44 @@ namespace kdr
       unsigned int height {600}; 
       std::string  title  {"Kedarium"};
 
-      GLFWwindow* glfwWindow {NULL};
+      GLFWwindow*      glfwWindow {NULL};
+      kdr::Color::RGBA clearColor = kdr::Color::Black;
+
+      kdr::Camera* boundCamera   {NULL};
+      GLuint       boundShaderID {0};
 
       /**
        * Initializes GLFW.
        *
        * @return True if initialization is successful, false otherwise.
        */
-      const bool _initializeGlfw();
+      bool _initializeGlfw();
       /**
        * Initializes the window.
        *
        * @return True if initialization is successful, false otherwise.
        */
-      const bool _initializeWindow();
+      bool _initializeWindow();
       /**
        * Initializes GLEW.
        *
        * @return True if initialization is successful, false otherwise.
        */
-      const bool _initializeGlew();
+      bool _initializeGlew();
       /**
        * Initializes OpenGL settings.
        * 
        * @return True if initialization is successful, false otherwise.
        */
-      const bool _initializeOpenGLSettings();
+      bool _initializeOpenGLSettings();
       /**
        * Overall initialization function.
        */
       void _initialize();
+      /**
+       * @brief Updates the currently bound camera.
+       */
+      void _updateBoundCamera();
       /**
        * Updates the window.
        */
