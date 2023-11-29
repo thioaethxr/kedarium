@@ -4,6 +4,7 @@ add_library(
   Constants.cpp
   Core.cpp
   File.cpp
+  Image.cpp
   Color.cpp
   Graphics.cpp
   Window.cpp

@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "File.hpp"
+#include "Image.hpp"
 
 namespace kdr
 {
@@ -91,7 +92,7 @@ namespace kdr
         void Bind()
         { glBindBuffer(GL_ARRAY_BUFFER, this->ID); }
         /**
-         * Unbinds the currently bound VBO from the OpenGL context
+         * Unbinds the currently bound VBO from the OpenGL context.
          */
         void Unbind()
         { glBindBuffer(GL_ARRAY_BUFFER, 0); }
@@ -133,7 +134,7 @@ namespace kdr
         void Bind()
         { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ID); }
         /**
-         * Unbinds the currently bound EBO from the OpenGL context
+         * Unbinds the currently bound EBO from the OpenGL context.
          */
         void Unbind()
         { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
@@ -184,7 +185,7 @@ namespace kdr
         void Bind()
         { glBindVertexArray(this->ID); }
         /**
-         * Unbinds the currently bound VAO from the OpenGL context
+         * Unbinds the currently bound VAO from the OpenGL context.
          */
         void Unbind()
         { glBindVertexArray(0); }
@@ -196,6 +197,60 @@ namespace kdr
 
       private:
         GLuint ID;
+    };
+
+    /**
+     * A class for handling OpenGL textures.
+     */
+    class Texture
+    {
+      public:
+        /**
+         * Constructor for creating a texture from an image file.
+         *
+         * @param imagePath The file path to the PNG image.
+         * @param type The type of the texture (e.g., GL_TEXTURE_2D).
+         * @param slot The texture unit slot to bind the texture to.
+         * @param format The internal format of the texture.
+         * @param pixelType The data type of the pixel data.
+         */
+        Texture(const std::string& imagePath, GLenum type, GLenum slot, GLenum format, GLenum pixelType);
+
+         /**
+         * Gets the ID of the texture.
+         *
+         * @return The ID of the texture.
+         */
+        const GLuint getID() const
+        { return this->ID; }
+
+        /**
+         * Sets the texture unit of a shader uniform variable.
+         *
+         * @param shaderID The ID of the shader program.
+         * @param uniform The name of the uniform variable in the shader.
+         * @param unit The texture unit to bind.
+         */
+        void TextureUnit(const GLuint shaderID, const std::string& uniform, GLuint unit);
+        /**
+         * Binds the texture to the OpenGL context.
+         */
+        void Bind()
+        { glBindTexture(this->type, this->ID); }
+        /**
+         * Unbinds the currently bound texture from the OpenGL context.
+         */
+        void Unbind()
+        { glBindTexture(this->type, 0); }
+        /**
+         * Deletes the texture, freeing up associated resources in the GPU.
+         */
+        void Delete()
+        { glDeleteTextures(1, &this->ID); }
+
+      private:
+        GLuint ID;
+        GLenum type;
     };
   };
 }

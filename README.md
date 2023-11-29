@@ -10,11 +10,12 @@ packages installed:
 - CMake
 - GLEW
 - GLFW
+- libPNG
 
 ### 🍎 MacOS
 
 ```
-brew install cmake glew glfw
+brew install cmake glew glfw libpng
 ```
 
 ### 🐧 Linux
@@ -25,19 +26,19 @@ distributions:
 **Debian and derivates (Ubuntu, Linux Mint, ...)**
 
 ```
-sudo apt install cmake libglew-dev libglfw3-dev
+sudo apt install cmake libglew-dev libglfw3-dev libpng-dev
 ```
 
 **Fedora**
 
 ```
-sudo dnf install cmake glew-devel glfw-devel
+sudo dnf install cmake glew-devel glfw-devel libpng-devel
 ```
 
 **Arch Linux and derivates (Manjaro, EndeavourOS, ...)**
 
 ```
-sudo pacman -S cmake glew glfw
+sudo pacman -S cmake glew glfw libpng
 ```
 
 ⚠️ Make sure to install the correct GLFW package depending on whether you're running X11

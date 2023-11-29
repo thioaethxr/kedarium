@@ -76,3 +76,32 @@ void kdr::gfx::VAO::LinkAttribute(kdr::gfx::VBO& VBO, GLuint layout, GLuint size
   glEnableVertexAttribArray(layout);
   VBO.Unbind();
 }
+
+kdr::gfx::Texture::Texture(const std::string& imagePath, GLenum type, GLenum slot, GLenum format, GLenum pixelType)
+{
+  this->type = type;
+
+  int width     {0};
+  int height    {0};
+  GLubyte* data {NULL};
+  kdr::img::loadFromPNG(imagePath, &data, width, height);
+
+  glGenTextures(1, &this->ID);
+  glActiveTexture(slot);
+  glBindTexture(this->type, this->ID);
+
+  glTexParameteri(this->type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(this->type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+  glTexImage2D(this->type, 0, GL_RGBA, width, height, 0, format, pixelType, data);
+  glGenerateMipmap(this->type);
+
+  delete data;
+  glBindTexture(this->type, 0);
+}
+
+void kdr::gfx::Texture::TextureUnit(const GLuint shaderID, const std::string& uniform, GLuint unit)
+{
+  GLuint texUnitLoc = glGetUniformLocation(shaderID, uniform.c_str());
+  glUniform1i(texUnitLoc, unit);
+}
