@@ -142,6 +142,14 @@ namespace kdr
        */
       void close();
       /**
+       * Maximizes the window.
+       */
+      void maximize();
+      /**
+       * Unmaximizes the window.
+       */
+      void unmaximize();
+      /**
        * Binds a shader for rendering.
        *
        * @param shader The shader to be bound.
@@ -153,6 +161,8 @@ namespace kdr
       }
 
     protected:
+      bool isFullscreenOn {false};
+
       /**
        * Pure virtual function for setting up the window.
        */

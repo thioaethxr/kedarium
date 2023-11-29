@@ -84,6 +84,19 @@ class MainWindow : public kdr::Window
         this->getBoundCamera()->setIsMouseLocked(false);
       }
 
+      if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::F))
+      {
+        if (!this->pressingFullscreen)
+        {
+          this->isFullscreenOn ? this->unmaximize() : this->maximize();
+          this->pressingFullscreen = true;
+        }
+      }
+      else
+      {
+        this->pressingFullscreen = false;
+      }
+
       if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::C))
       {
         kdr::gfx::usePointMode();
@@ -121,6 +134,8 @@ class MainWindow : public kdr::Window
     kdr::gfx::VAO VAO1;
     kdr::gfx::VBO VBO1 {vertices, sizeof(vertices)};
     kdr::gfx::EBO EBO1 {indices, sizeof(indices)};
+
+    bool pressingFullscreen {false};
 };
 
 int main()
