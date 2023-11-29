@@ -61,6 +61,14 @@ namespace kdr
       {}
 
       /**
+       * Sets the aspect ratio of the camera.
+       *
+       * @param aspect The new aspect ratio to set.
+       */
+      void setAspect(const float aspect)
+      { this->aspect = aspect; }
+
+      /**
        * Updates the internal transformation matrix of the camera.
        */
       void updateMatrix();

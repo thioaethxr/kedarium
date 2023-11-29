@@ -2,7 +2,13 @@
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
+  kdr::Window* windowInstance = (kdr::Window*)glfwGetWindowUserPointer(window);
   glViewport(0, 0, width, height);
+
+  if (windowInstance->getBoundCamera() == NULL) return;
+
+  const float aspect = (float)width / height;
+  windowInstance->getBoundCamera()->setAspect(aspect);
 }
 
 kdr::Window::~Window()
