@@ -91,6 +91,7 @@ void kdr::Window::_updateBoundCamera()
   if (this->boundShaderID == 0) return;
 
   this->boundCamera->handleMovement(this->glfwWindow);
+  this->boundCamera->handleMouseMovement(this->glfwWindow);
   this->boundCamera->updateMatrix();
   this->boundCamera->applyMatrix(this->boundShaderID, "cameraMatrix");
 }

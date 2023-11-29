@@ -31,6 +31,8 @@ void kdr::Camera::applyMatrix(const GLuint shaderID, const std::string& uniformN
 
 void kdr::Camera::handleMovement(GLFWwindow* window)
 {
+  if (!this->isMouseLocked) return;
+
   if (kdr::keys::isPressed(window, kdr::Key::W))
   {
     this->position -= this->front * this->speed;
@@ -55,4 +57,15 @@ void kdr::Camera::handleMovement(GLFWwindow* window)
   {
     this->position -= this->up * this->speed;
   }
+}
+
+void kdr::Camera::handleMouseMovement(GLFWwindow* window)
+{
+  glfwSetInputMode(
+    window,
+    GLFW_CURSOR,
+    this->isMouseLocked
+      ? GLFW_CURSOR_DISABLED
+      : GLFW_CURSOR_NORMAL
+  );
 }

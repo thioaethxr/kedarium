@@ -75,6 +75,15 @@ class MainWindow : public kdr::Window
 
     void update()
     {
+      if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::E))
+      {
+        this->getBoundCamera()->setIsMouseLocked(true);
+      }
+      else if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::Escape))
+      {
+        this->getBoundCamera()->setIsMouseLocked(false);
+      }
+
       if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::C))
       {
         kdr::gfx::usePointMode();

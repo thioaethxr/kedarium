@@ -67,6 +67,13 @@ namespace kdr
        */
       void setAspect(const float aspect)
       { this->aspect = aspect; }
+      /**
+       * Sets the mouse lock status for the camera.
+       *
+       * @param locked If true, the mouse is locked; if false, the mouse is unlocked.
+       */
+      void setIsMouseLocked(const bool locked)
+      { this->isMouseLocked = locked; }
 
       /**
        * Updates the internal transformation matrix of the camera.
@@ -85,6 +92,12 @@ namespace kdr
        * @param window The GLFW window for input handling.
        */
       void handleMovement(GLFWwindow* window);
+      /**
+       * Handles mouse movement for the camera.
+       *
+       * @param window The GLFW window for input handling.
+       */
+      void handleMouseMovement(GLFWwindow* window);
 
     private:
       float fov         {60.f};
@@ -98,6 +111,8 @@ namespace kdr
       kdr::space::Vec3 position {0.f,  0.f, -5.f};
       kdr::space::Vec3 up       {0.f, -1.f,  0.f};
       kdr::space::Vec3 front    {0.f,  0.f, -1.f};
+
+      bool isMouseLocked {false};
   };
 }
 
