@@ -9,7 +9,11 @@ set(OpenGL_GL_PREFERENCE "LEGACY")
 project(${PROJECT_NAME})
 
 # CXX Standard
-set(CMAKE_CXX_STANDARD_REQUIRED 11)
+set(CMAKE_CXX_STANDARD_REQUIRED 17)
+set(CMAKE_CXX_FLAGS "-Wall")
+if(APPLE)
+  set(CMAKE_CXX_FLAGS "-std=c++17 -stdlib=libc++ -Wall")
+endif()
 
 # Packages
 find_package(OpenGL REQUIRED)

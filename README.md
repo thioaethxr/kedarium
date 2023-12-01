@@ -18,6 +18,16 @@ packages installed:
 brew install cmake glew glfw libpng
 ```
 
+If your compiler cannot find the libraries during the compilation process, it
+is possible that it can't locate the packages installed with Homebrew. To address
+this, you can run the following commands when launching a new terminal instance
+or add them to your shell startup file (.bashrc, .zshrc, or similar):
+
+```
+export CPATH=/opt/homebrew/include
+export LIBRARY_PATH=/opt/homebrew/lib
+```
+
 ### 🐧 Linux
 
 Use the following commands to install the required packages on different Linux
@@ -65,3 +75,7 @@ directory of the project:
 ```
 ./build/examples/example
 ```
+
+## Special thanks
+
+- [@Orange4Broom](https://github.com/Orange4Broom/) - testing the engine on MacOS
