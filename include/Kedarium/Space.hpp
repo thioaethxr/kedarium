@@ -1,7 +1,7 @@
 #ifndef KDR_SPACE_HPP
 #define KDR_SPACE_HPP
 
-#include <math.h>
+#include <cmath>
 #include <cstring>
 
 namespace kdr
@@ -20,7 +20,7 @@ namespace kdr
      * @return The equivalent angle in radians.
      */
     inline float radians(const float degrees)
-    { return degrees * 180 / kdr::space::PI; }
+    { return degrees * kdr::space::PI / 180.f; }
 
     /**
      * 3D vector class representing a point or direction in 3D space.
@@ -57,7 +57,7 @@ namespace kdr
          * @param vec The vector to add.
          * @return A new Vec3 representing the sum of the two vectors.
          */
-        Vec3 operator+(const Vec3& vec)
+        Vec3 operator+(const Vec3& vec) const
         {
           return Vec3(
             this->x + vec.x,
@@ -71,7 +71,7 @@ namespace kdr
          * @param vec The vector to subtract.
          * @return A new Vec3 representing the difference between the two vectors.
          */
-        Vec3 operator-(const Vec3& vec)
+        Vec3 operator-(const Vec3& vec) const
         {
           return Vec3(
             this->x - vec.x,
@@ -85,7 +85,7 @@ namespace kdr
          * @param scalar The scalar value to multiply the vector by.
          * @return The resulting vector after multiplication.
          */
-        Vec3 operator*(float scalar)
+        Vec3 operator*(float scalar) const
         {
           return Vec3(
             this->x * scalar,
@@ -188,6 +188,21 @@ namespace kdr
     };
 
     /**
+     * Normalizes a 3D vector.
+     *
+     * @param vec The 3D vector to be normalized.
+     * @return A normalized 3D vector.
+     */
+    inline kdr::space::Vec3 normalize(const kdr::space::Vec3& vec)
+    {
+      const float length = std::sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+      return length > 0.f ? kdr::space::Vec3 {
+        vec.x / length,
+        vec.y / length,
+        vec.z / length,
+      } : kdr::space::Vec3 {0.f};
+    }
+    /**
      * Computes the dot product of two 3D vectors.
      *
      * @param vecA The first 3D vector.
@@ -238,6 +253,15 @@ namespace kdr
      * @return The resulting perspective projection matrix.
      */
     kdr::space::Mat4 perspective(const float fov, const float aspect, const float near, const float far);
+    /**
+     * Creates a view matrix to simulate a camera looking at a target.
+     *
+     * @param eye The position of the camera.
+     * @param target The point the camera is looking at.
+     * @param up The up vector of the camera.
+     * @return The view matrix.
+     */
+    kdr::space::Mat4 lookAt(const kdr::space::Vec3& eye, const kdr::space::Vec3& target, const kdr::space::Vec3& up);
   }
 }
 

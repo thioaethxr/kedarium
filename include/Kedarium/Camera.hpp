@@ -108,10 +108,13 @@ namespace kdr
       float speed       {4.f};
       float sensitivity {12.f};
 
-      kdr::space::Mat4 matrix;
-      kdr::space::Vec3 position {0.f,  0.f, -5.f};
-      kdr::space::Vec3 up       {0.f, -1.f,  0.f};
-      kdr::space::Vec3 front    {0.f,  0.f, -1.f};
+      kdr::space::Mat4 matrix   {1.f};
+      kdr::space::Vec3 position {0.f, 0.f, -5.f};
+      kdr::space::Vec3 up       {0.f, 1.f,  0.f};
+      kdr::space::Vec3 front    {0.f, 0.f, -1.f};
+
+      float yaw   {90.f};
+      float pitch {0.f};
 
       bool isMouseLocked {false};
   };

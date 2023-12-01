@@ -5,13 +5,16 @@ void kdr::Camera::updateMatrix()
   kdr::space::Mat4 view  {1.f};
   kdr::space::Mat4 proj  {1.f};
 
-  view = kdr::space::translate(
-    view,
-    {
-      this->position.x,
-      this->position.y,
-      this->position.z
-    }
+  kdr::space::Vec3 tempFront {0.f};
+  tempFront.x = cos(kdr::space::radians(yaw)) * cos(kdr::space::radians(pitch));
+  tempFront.y = sin(kdr::space::radians(pitch));
+  tempFront.z = sin(kdr::space::radians(yaw)) * cos(kdr::space::radians(pitch));
+  this->front = kdr::space::normalize(tempFront);
+
+  view = kdr::space::lookAt(
+    this->position,
+    this->position + this->front,
+    this->up
   );
   proj = kdr::space::perspective(
     this->fov,
@@ -35,11 +38,11 @@ void kdr::Camera::handleMovement(GLFWwindow* window, const float deltaTime)
 
   if (kdr::keys::isPressed(window, kdr::Key::W))
   {
-    this->position -= this->front * this->speed * deltaTime;
+    this->position += this->front * this->speed * deltaTime;
   }
   if (kdr::keys::isPressed(window, kdr::Key::S))
   {
-    this->position += this->front * this->speed * deltaTime;
+    this->position -= this->front * this->speed * deltaTime;
   }
   if (kdr::keys::isPressed(window, kdr::Key::A))
   {
@@ -68,4 +71,26 @@ void kdr::Camera::handleMouseMovement(GLFWwindow* window)
       ? GLFW_CURSOR_DISABLED
       : GLFW_CURSOR_NORMAL
   );
+  if (!this->isMouseLocked) return;
+
+  double mouseX {0.f};
+  double mouseY {0.f};
+  glfwGetCursorPos(window, &mouseX, &mouseY);
+
+  int windowWidth;
+  int windowHeight;
+  glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
+
+  float deltaX = (mouseX - (float)windowWidth / 2.f) * this->sensitivity;
+  float deltaY = (mouseY - (float)windowHeight / 2.f) * this->sensitivity;
+
+  this->yaw += deltaX;
+  this->pitch -= deltaY;
+
+  if (pitch > 89.0f) pitch = 89.0f;
+  if (pitch < -89.0f) pitch = -89.0f;
+
+  yaw = std::remainderf(yaw, 360.f);
+
+  glfwSetCursorPos(window, (double)windowWidth / 2.f, (double)windowHeight / 2.f);
 }

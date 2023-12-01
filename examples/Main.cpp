@@ -22,7 +22,7 @@ constexpr float CAMERA_ASPECT      {(float)WINDOW_WIDTH / WINDOW_HEIGHT};
 constexpr float CAMERA_NEAR        {0.1f};
 constexpr float CAMERA_FAR         {100.f};
 constexpr float CAMERA_SPEED       {4.f};
-constexpr float CAMERA_SENSITIVITY {100.f};
+constexpr float CAMERA_SENSITIVITY {0.1f};
 
 // Vertices and Indices
 GLfloat vertices[] = {
