@@ -105,6 +105,7 @@ bool kdr::Window::_initializeGlew()
 bool kdr::Window::_initializeOpenGLSettings()
 {
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
   glPointSize(5.f);
   glLineWidth(2.f);
   return true;

@@ -99,7 +99,7 @@ class MainWindow : public kdr::Window
     {
       this->bindShader(this->defaultShader);
       this->concreteTexture.Bind();
-      this->testCube.render(this->defaultShader.getID());
+      this->testCuboid.render(this->defaultShader.getID());
     }
 
   private:
@@ -114,8 +114,10 @@ class MainWindow : public kdr::Window
       GL_RGBA,
       GL_UNSIGNED_BYTE
     };
-    kdr::solids::Cube testCube {
+    kdr::solids::Cuboid testCuboid {
       {0.f, 0.f, 0.f},
+      2.f,
+      1.f,
       1.f
     };
     bool pressingFullscreen {false};

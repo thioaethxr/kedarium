@@ -71,6 +71,30 @@ namespace kdr
          */
         void render(const GLuint shaderID);
     };
+
+    /**
+     * A class representing a 3D cuboid.
+     */
+    class Cuboid : Solid
+    {
+      public:
+        /**
+         * Constructs a Cuboid object with a specified initial position and dimensions.
+         *
+         * @param position The initial position of the cuboid in 3D space.
+         * @param length   The length of the cuboid along the X-axis.
+         * @param height   The height of the cuboid along the Y-axis.
+         * @param width    The width of the cuboid along the Z-axis.
+         */
+        Cuboid(const kdr::space::Vec3& position, const float length, const float height, const float width);
+
+        /**
+         * Renders the cuboid using the provided shader program.
+         *
+         * @param shaderID The ID of the shader program to use for rendering.
+         */
+        void render(const GLuint shaderID);
+    };
   };
 }
 
