@@ -104,6 +104,7 @@ bool kdr::Window::_initializeGlew()
 
 bool kdr::Window::_initializeOpenGLSettings()
 {
+  glEnable(GL_DEPTH_TEST);
   glPointSize(5.f);
   glLineWidth(2.f);
   return true;
@@ -147,7 +148,7 @@ void kdr::Window::_update()
 
 void kdr::Window::_render()
 {
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   this->render();
   glfwSwapBuffers(this->glfwWindow);
 }

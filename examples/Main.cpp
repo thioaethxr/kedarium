@@ -9,7 +9,7 @@
 #include "Kedarium/Graphics.hpp"
 #include "Kedarium/Window.hpp"
 #include "Kedarium/Camera.hpp"
-#include "Kedarium/Debug.hpp"
+#include "Kedarium/Solids.hpp"
 
 // Constants
 constexpr unsigned int WINDOW_WIDTH  {800};
@@ -45,10 +45,6 @@ class MainWindow : public kdr::Window
     {
       this->defaultShader.Delete();
       this->concreteTexture.Delete();
-
-      this->VAO1.Delete();
-      this->VBO1.Delete();
-      this->EBO1.Delete();
     }
 
     void setup()
@@ -59,18 +55,6 @@ class MainWindow : public kdr::Window
       kdr::core::printVersionInfo();
 
       this->concreteTexture.TextureUnit(this->defaultShader.getID(), "tex0", 0);
-
-      this->VAO1.Bind();
-      this->VBO1.Bind();
-      this->EBO1.Bind();
-
-      this->VAO1.LinkAttribute(this->VBO1, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)0);
-      this->VAO1.LinkAttribute(this->VBO1, 1, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-      this->VAO1.LinkAttribute(this->VBO1, 2, 2, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
-
-      this->VAO1.Unbind();
-      this->VBO1.Unbind();
-      this->EBO1.Unbind();
     }
 
     void update()
@@ -114,9 +98,8 @@ class MainWindow : public kdr::Window
     void render()
     {
       this->bindShader(this->defaultShader);
-      this->VAO1.Bind();
       this->concreteTexture.Bind();
-      glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
+      this->testCube.render(this->defaultShader.getID());
     }
 
   private:
@@ -131,10 +114,10 @@ class MainWindow : public kdr::Window
       GL_RGBA,
       GL_UNSIGNED_BYTE
     };
-    kdr::gfx::VAO VAO1;
-    kdr::gfx::VBO VBO1 {vertices, sizeof(vertices)};
-    kdr::gfx::EBO EBO1 {indices, sizeof(indices)};
-
+    kdr::solids::Cube testCube {
+      {0.f, 0.f, 0.f},
+      1.f
+    };
     bool pressingFullscreen {false};
 };
 
