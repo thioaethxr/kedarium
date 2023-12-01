@@ -159,3 +159,55 @@ void kdr::solids::Cuboid::render(const GLuint shaderID)
   glDrawElements(GL_TRIANGLES, sizeof(cuboidIndices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
   this->VAO->Unbind();
 }
+
+GLuint pyramidIndices[] = {
+  0,  1,  3,  // BT
+  0,  3,  2,  // BT
+  4,  5,  12, // FT
+  6,  7,  12, // RT
+  8,  9,  12, // BK
+  10, 11, 12, // LT
+};
+
+kdr::solids::Pyramid::Pyramid(const kdr::space::Vec3& position, const float edgeLength, const float height) : kdr::solids::Solid(position)
+{
+  GLfloat pyramidVertices[] = {
+    -(edgeLength / 2.f), -(height / 2.f), -(edgeLength / 2.f), 1.f, 1.f, 1.f, 1.f,  0.f, // BT 001 0
+     (edgeLength / 2.f), -(height / 2.f), -(edgeLength / 2.f), 1.f, 1.f, 1.f, 0.f,  0.f, // BT 101 1
+    -(edgeLength / 2.f), -(height / 2.f),  (edgeLength / 2.f), 1.f, 1.f, 1.f, 1.f,  1.f, // BT 000 2
+     (edgeLength / 2.f), -(height / 2.f),  (edgeLength / 2.f), 1.f, 1.f, 1.f, 0.f,  1.f, // BT 100 3
+    -(edgeLength / 2.f), -(height / 2.f),  (edgeLength / 2.f), 1.f, 1.f, 1.f, 0.f,  0.f, // FT 000 4
+     (edgeLength / 2.f), -(height / 2.f),  (edgeLength / 2.f), 1.f, 1.f, 1.f, 1.f,  0.f, // FT 100 5
+     (edgeLength / 2.f), -(height / 2.f),  (edgeLength / 2.f), 1.f, 1.f, 1.f, 0.f,  0.f, // RT 100 6
+     (edgeLength / 2.f), -(height / 2.f), -(edgeLength / 2.f), 1.f, 1.f, 1.f, 1.f,  0.f, // RT 101 7
+     (edgeLength / 2.f), -(height / 2.f), -(edgeLength / 2.f), 1.f, 1.f, 1.f, 0.f,  0.f, // BK 101 8
+    -(edgeLength / 2.f), -(height / 2.f), -(edgeLength / 2.f), 1.f, 1.f, 1.f, 1.f,  0.f, // BK 001 9
+    -(edgeLength / 2.f), -(height / 2.f), -(edgeLength / 2.f), 1.f, 1.f, 1.f, 0.f,  0.f, // LT 001 10
+    -(edgeLength / 2.f), -(height / 2.f),  (edgeLength / 2.f), 1.f, 1.f, 1.f, 1.f,  0.f, // LT 000 11
+     0.f,                 (height / 2.f),  0.f,                1.f, 1.f, 1.f, 0.5f, 1.f, // TP 111 12
+  };
+
+  this->VAO = new kdr::gfx::VAO();
+  this->VBO = new kdr::gfx::VBO {pyramidVertices, sizeof(pyramidVertices)};
+  this->EBO = new kdr::gfx::EBO {pyramidIndices, sizeof(pyramidIndices)};
+
+  this->VAO->Bind();
+  this->VBO->Bind();
+  this->EBO->Bind();
+
+  this->VAO->LinkAttribute(*this->VBO, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)0);
+  this->VAO->LinkAttribute(*this->VBO, 1, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+  this->VAO->LinkAttribute(*this->VBO, 2, 2, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
+
+  this->VAO->Unbind();
+  this->VBO->Unbind();
+  this->EBO->Unbind();
+}
+
+void kdr::solids::Pyramid::render(const GLuint shaderID)
+{
+  this->VAO->Bind();
+  this->_applyPosition(shaderID);
+  glDrawElements(GL_TRIANGLES, sizeof(pyramidIndices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
+  this->VAO->Unbind();
+}

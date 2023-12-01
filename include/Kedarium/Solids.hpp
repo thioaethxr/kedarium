@@ -95,6 +95,29 @@ namespace kdr
          */
         void render(const GLuint shaderID);
     };
+
+    /**
+     * A class representing a 3D pyramid.
+     */
+    class Pyramid : Solid
+    {
+      public:
+        /**
+         * Constructs a Pyramid object with a specified initial position, edge length, and height.
+         *
+         * @param position   The initial position of the pyramid in 3D space.
+         * @param edgeLength The length of the edges of the pyramid's base.
+         * @param height     The height of the pyramid.
+         */
+        Pyramid(const kdr::space::Vec3& position, const float edgeLength, const float height);
+
+        /**
+         * Renders the pyramid using the provided shader program.
+         *
+         * @param shaderID The ID of the shader program to use for rendering.
+         */
+        void render(const GLuint shaderID);
+    };
   };
 }
 

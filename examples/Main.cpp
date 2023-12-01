@@ -24,18 +24,6 @@ constexpr float CAMERA_FAR         {100.f};
 constexpr float CAMERA_SPEED       {4.f};
 constexpr float CAMERA_SENSITIVITY {0.1f};
 
-// Vertices and Indices
-GLfloat vertices[] = {
-  -0.5f, -0.5f, 0.f, 1.f, 1.f, 1.f, 0.f, 0.f,
-   0.5f, -0.5f, 0.f, 1.f, 1.f, 1.f, 1.f, 0.f,
-  -0.5f,  0.5f, 0.f, 1.f, 1.f, 1.f, 0.f, 1.f,
-   0.5f,  0.5f, 0.f, 1.f, 1.f, 1.f, 1.f, 1.f,
-};
-GLuint indices[] = {
-  0, 1, 3,
-  0, 3, 2,
-};
-
 class MainWindow : public kdr::Window
 {
   public:
@@ -99,7 +87,7 @@ class MainWindow : public kdr::Window
     {
       this->bindShader(this->defaultShader);
       this->concreteTexture.Bind();
-      this->testCuboid.render(this->defaultShader.getID());
+      this->testPyramid.render(this->defaultShader.getID());
     }
 
   private:
@@ -114,9 +102,8 @@ class MainWindow : public kdr::Window
       GL_RGBA,
       GL_UNSIGNED_BYTE
     };
-    kdr::solids::Cuboid testCuboid {
+    kdr::solids::Pyramid testPyramid {
       {0.f, 0.f, 0.f},
-      2.f,
       1.f,
       1.f
     };
