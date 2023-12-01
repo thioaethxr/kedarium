@@ -103,6 +103,13 @@ namespace kdr
       GLFWwindow* getGlfwWindow() const
       { return this->glfwWindow; }
       /**
+       * @brief Gets the time difference since the last update.
+       *
+       * @return The time difference (delta time) since the last update.
+       */
+      float getDeltaTime() const
+      { return this->deltaTime; }
+      /**
        * Gets the currently bound camera.
        *
        * @return A pointer to the currently bound camera.
@@ -184,6 +191,9 @@ namespace kdr
       GLFWwindow*      glfwWindow {NULL};
       kdr::Color::RGBA clearColor = kdr::Color::Black;
 
+      float lastTime  {};
+      float deltaTime {0.f};
+
       kdr::Camera* boundCamera   {NULL};
       GLuint       boundShaderID {0};
 
@@ -215,6 +225,10 @@ namespace kdr
        * Overall initialization function.
        */
       void _initialize();
+      /**
+       * Updates the time difference since the last update.
+       */
+      void _updateDeltaTime();
       /**
        * @brief Updates the currently bound camera.
        */

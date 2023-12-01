@@ -29,33 +29,33 @@ void kdr::Camera::applyMatrix(const GLuint shaderID, const std::string& uniformN
   glUniformMatrix4fv(cameraMatrixLoc, 1, GL_FALSE, kdr::space::valuePointer(this->matrix));
 }
 
-void kdr::Camera::handleMovement(GLFWwindow* window)
+void kdr::Camera::handleMovement(GLFWwindow* window, const float deltaTime)
 {
   if (!this->isMouseLocked) return;
 
   if (kdr::keys::isPressed(window, kdr::Key::W))
   {
-    this->position -= this->front * this->speed;
+    this->position -= this->front * this->speed * deltaTime;
   }
   if (kdr::keys::isPressed(window, kdr::Key::S))
   {
-    this->position += this->front * this->speed;
+    this->position += this->front * this->speed * deltaTime;
   }
   if (kdr::keys::isPressed(window, kdr::Key::A))
   {
-    this->position -= kdr::space::cross(this->front, this->up) * this->speed;
+    this->position -= kdr::space::cross(this->front, this->up) * this->speed * deltaTime;
   }
   if (kdr::keys::isPressed(window, kdr::Key::D))
   {
-    this->position += kdr::space::cross(this->front, this->up) * this->speed;
+    this->position += kdr::space::cross(this->front, this->up) * this->speed * deltaTime;
   }
   if (kdr::keys::isPressed(window, kdr::Key::Space))
   {
-    this->position += this->up * this->speed;
+    this->position += this->up * this->speed * deltaTime;
   }
   if (kdr::keys::isPressed(window, kdr::Key::LeftShift))
   {
-    this->position -= this->up * this->speed;
+    this->position -= this->up * this->speed * deltaTime;
   }
 }
 

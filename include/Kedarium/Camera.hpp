@@ -90,8 +90,9 @@ namespace kdr
        * Handles camera movement based on user input.
        *
        * @param window The GLFW window for input handling.
+       * @param deltaTime The time difference (delta time) since the last update.
        */
-      void handleMovement(GLFWwindow* window);
+      void handleMovement(GLFWwindow* window, const float deltaTime);
       /**
        * Handles mouse movement for the camera.
        *
@@ -104,7 +105,7 @@ namespace kdr
       float aspect      {1.f};
       float near        {0.1f};
       float far         {100.f};
-      float speed       {1.f};
+      float speed       {4.f};
       float sensitivity {12.f};
 
       kdr::space::Mat4 matrix;
