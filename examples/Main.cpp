@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <vector>
 #include <string>
 
 #include "Kedarium/Core.hpp"
@@ -41,6 +42,18 @@ class MainWindow : public kdr::Window
       kdr::core::printEngineInfo();
       std::cout << '\n';
       kdr::core::printVersionInfo();
+
+      for (int z = 0; z < 3; z++)
+      {
+        for (int x = 0; x < 3; x++)
+        {
+          this->pyramids.push_back(new kdr::solids::Pyramid(
+            {(x - 1.f), 0.f, (z - 1.f)},
+            1.f,
+            1.f
+          ));
+        }
+      }
 
       this->concreteTexture.TextureUnit(this->defaultShader.getID(), "tex0", 0);
     }
@@ -87,7 +100,11 @@ class MainWindow : public kdr::Window
     {
       this->bindShader(this->defaultShader);
       this->concreteTexture.Bind();
-      this->testPyramid.render(this->defaultShader.getID());
+      testPlane.render(this->defaultShader.getID());
+      for (kdr::solids::Pyramid* pyramid : this->pyramids)
+      {
+        pyramid->render(this->defaultShader.getID());
+      }
     }
 
   private:
@@ -102,11 +119,12 @@ class MainWindow : public kdr::Window
       GL_RGBA,
       GL_UNSIGNED_BYTE
     };
-    kdr::solids::Pyramid testPyramid {
-      {0.f, 0.f, 0.f},
-      1.f,
-      1.f
+    kdr::solids::Plane testPlane {
+      {0.f, -1.f, 0.f},
+      5.f,
+      5.f
     };
+    std::vector<kdr::solids::Pyramid*> pyramids;
     bool pressingFullscreen {false};
 };
 

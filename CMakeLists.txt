@@ -10,9 +10,9 @@ project(${PROJECT_NAME})
 
 # CXX Standard
 set(CMAKE_CXX_STANDARD_REQUIRED 17)
-set(CMAKE_CXX_FLAGS "-Wall")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")
 if(APPLE)
-  set(CMAKE_CXX_FLAGS "-std=c++17 -stdlib=libc++ -Wall")
+  set(CMAKE_CXX_FLAGS "-std=c++17 -stdlib=libc++ -Wall -Wextra -Wpedantic")
 endif()
 
 # Packages

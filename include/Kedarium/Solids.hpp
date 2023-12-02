@@ -118,6 +118,29 @@ namespace kdr
          */
         void render(const GLuint shaderID);
     };
+
+    /**
+     * A class representing a 3D plane.
+     */
+    class Plane : Solid
+    {
+      public:
+        /**
+         * @brief Constructs a Plane object with a specified initial position, length, and width.
+         *
+         * @param position The initial position of the plane in 3D space.
+         * @param length   The length of the plane.
+         * @param width    The width of the plane.
+         */
+        Plane(const kdr::space::Vec3& position, const float length, const float width);
+
+        /**
+         * Renders the plane using the provided shader program.
+         *
+         * @param shaderID The ID of the shader program to use for rendering.
+         */
+        void render(const GLuint shaderID);
+    };
   };
 }
 

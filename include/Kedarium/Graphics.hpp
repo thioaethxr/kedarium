@@ -221,7 +221,7 @@ namespace kdr
          *
          * @return The ID of the texture.
          */
-        const GLuint getID() const
+        GLuint getID() const
         { return this->ID; }
 
         /**
