@@ -11,6 +11,25 @@ kdr::solids::Solid::~Solid()
   delete this->EBO;
 }
 
+void kdr::solids::Solid::_initializeComponents(GLfloat vertices[], GLsizeiptr verticesSize, GLuint indices[], GLsizeiptr indicesSize)
+{
+  this->VAO = new kdr::gfx::VAO();
+  this->VBO = new kdr::gfx::VBO {vertices, verticesSize};
+  this->EBO = new kdr::gfx::EBO {indices, indicesSize};
+
+  this->VAO->Bind();
+  this->VBO->Bind();
+  this->EBO->Bind();
+
+  this->VAO->LinkAttribute(*this->VBO, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)0);
+  this->VAO->LinkAttribute(*this->VBO, 1, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+  this->VAO->LinkAttribute(*this->VBO, 2, 2, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
+
+  this->VAO->Unbind();
+  this->VBO->Unbind();
+  this->EBO->Unbind();
+}
+
 void kdr::solids::Solid::_applyPosition(const GLuint shaderID)
 {
   kdr::space::Mat4 model {1.f};
@@ -65,22 +84,7 @@ kdr::solids::Cube::Cube(const kdr::space::Vec3& position, const float edgeLength
     -(edgeLength / 2.f), -(edgeLength / 2.f),  (edgeLength / 2.f), 1.f, 1.f, 1.f, 1.f, 1.f, // BT 000 22
      (edgeLength / 2.f), -(edgeLength / 2.f),  (edgeLength / 2.f), 1.f, 1.f, 1.f, 0.f, 1.f, // BT 100 23
   };
-
-  this->VAO = new kdr::gfx::VAO();
-  this->VBO = new kdr::gfx::VBO {cubeVertices, sizeof(cubeVertices)};
-  this->EBO = new kdr::gfx::EBO {cubeIndices, sizeof(cubeIndices)};
-
-  this->VAO->Bind();
-  this->VBO->Bind();
-  this->EBO->Bind();
-
-  this->VAO->LinkAttribute(*this->VBO, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)0);
-  this->VAO->LinkAttribute(*this->VBO, 1, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-  this->VAO->LinkAttribute(*this->VBO, 2, 2, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
-
-  this->VAO->Unbind();
-  this->VBO->Unbind();
-  this->EBO->Unbind();
+  this->_initializeComponents(cubeVertices, sizeof(cubeVertices), cubeIndices, sizeof(cubeIndices));
 }
 
 void kdr::solids::Cube::render(const GLuint shaderID)
@@ -134,22 +138,7 @@ kdr::solids::Cuboid::Cuboid(const kdr::space::Vec3& position, const float length
     -(length / 2.f), -(height / 2.f),  (width / 2.f), 1.f, 1.f, 1.f, length, height, // BT 000 22
      (length / 2.f), -(height / 2.f),  (width / 2.f), 1.f, 1.f, 1.f, 0.f,    height, // BT 100 23
   };
-
-  this->VAO = new kdr::gfx::VAO();
-  this->VBO = new kdr::gfx::VBO {cuboidVertices, sizeof(cuboidVertices)};
-  this->EBO = new kdr::gfx::EBO {cuboidIndices, sizeof(cuboidIndices)};
-
-  this->VAO->Bind();
-  this->VBO->Bind();
-  this->EBO->Bind();
-
-  this->VAO->LinkAttribute(*this->VBO, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)0);
-  this->VAO->LinkAttribute(*this->VBO, 1, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-  this->VAO->LinkAttribute(*this->VBO, 2, 2, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
-
-  this->VAO->Unbind();
-  this->VBO->Unbind();
-  this->EBO->Unbind();
+  this->_initializeComponents(cuboidVertices, sizeof(cuboidVertices), cuboidIndices, sizeof(cuboidIndices));
 }
 
 void kdr::solids::Cuboid::render(const GLuint shaderID)
@@ -186,22 +175,7 @@ kdr::solids::Pyramid::Pyramid(const kdr::space::Vec3& position, const float edge
     -(edgeLength / 2.f), -(height / 2.f),  (edgeLength / 2.f), 1.f, 1.f, 1.f, 1.f,  0.f, // LT 000 11
      0.f,                 (height / 2.f),  0.f,                1.f, 1.f, 1.f, 0.5f, 1.f, // TP 111 12
   };
-
-  this->VAO = new kdr::gfx::VAO();
-  this->VBO = new kdr::gfx::VBO {pyramidVertices, sizeof(pyramidVertices)};
-  this->EBO = new kdr::gfx::EBO {pyramidIndices, sizeof(pyramidIndices)};
-
-  this->VAO->Bind();
-  this->VBO->Bind();
-  this->EBO->Bind();
-
-  this->VAO->LinkAttribute(*this->VBO, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)0);
-  this->VAO->LinkAttribute(*this->VBO, 1, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-  this->VAO->LinkAttribute(*this->VBO, 2, 2, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
-
-  this->VAO->Unbind();
-  this->VBO->Unbind();
-  this->EBO->Unbind();
+  this->_initializeComponents(pyramidVertices, sizeof(pyramidVertices), pyramidIndices, sizeof(pyramidIndices));
 }
 
 void kdr::solids::Pyramid::render(const GLuint shaderID)
@@ -225,22 +199,7 @@ kdr::solids::Plane::Plane(const kdr::space::Vec3& position, const float length, 
     -(length / 2.f), 0.f, -(width / 2.f), 1.f, 1.f, 1.f, 0.f,    width, // 01 2
      (length / 2.f), 0.f, -(width / 2.f), 1.f, 1.f, 1.f, length, width, // 11 3
   };
-
-  this->VAO = new kdr::gfx::VAO();
-  this->VBO = new kdr::gfx::VBO {planeVertices, sizeof(planeVertices)};
-  this->EBO = new kdr::gfx::EBO {planeIndices, sizeof(planeIndices)};
-
-  this->VAO->Bind();
-  this->VBO->Bind();
-  this->EBO->Bind();
-
-  this->VAO->LinkAttribute(*this->VBO, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)0);
-  this->VAO->LinkAttribute(*this->VBO, 1, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-  this->VAO->LinkAttribute(*this->VBO, 2, 2, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
-
-  this->VAO->Unbind();
-  this->VBO->Unbind();
-  this->EBO->Unbind();
+  this->_initializeComponents(planeVertices, sizeof(planeVertices), planeIndices, sizeof(planeIndices));
 }
 
 void kdr::solids::Plane::render(const GLuint shaderID)

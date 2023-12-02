@@ -43,6 +43,15 @@ namespace kdr
         kdr::gfx::EBO* EBO {NULL};
 
         /**
+         * Initializes the graphical components (VAO, VBO, EBO) for rendering the solid.
+         *
+         * @param vertices      An array containing the vertex data of the solid.
+         * @param verticesSize  The size of the vertices array in bytes.
+         * @param indices       An array containing the index data for forming triangles.
+         * @param indicesSize   The size of the indices array in bytes.
+         */
+        void _initializeComponents(GLfloat vertices[], GLsizeiptr verticesSize, GLuint indices[], GLsizeiptr indicesSize);
+        /**
          * Applies the position of the solid to the model matrix in the shader.
          *
          * @param shaderID The ID of the shader program.
@@ -141,7 +150,7 @@ namespace kdr
          */
         void render(const GLuint shaderID);
     };
-  };
+  }
 }
 
 #endif // KDR_SOLIDS_HPP
