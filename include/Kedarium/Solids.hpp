@@ -8,6 +8,8 @@
 #include "Graphics.hpp"
 #include "Model.hpp"
 
+#include "Debug.hpp"
+
 namespace kdr
 {
   namespace solids
@@ -24,11 +26,32 @@ namespace kdr
          * @param position The initial position of the solid in 3D space.
          */
         Solid(const kdr::space::Vec3& position) : position(position)
-        {}
+        {
+          this->model = kdr::space::translate(this->model, position);
+        }
         /**
          * Destructor for the Solid class.
          */
         virtual ~Solid();
+
+        /**
+         * Rotates the Solid around the X-axis by a specified angle.
+         *
+         * @param angle The angle of rotation in radians.
+         */
+        void rotateX(const float angle);
+        /**
+         * Rotates the Solid around the Y-axis by a specified angle.
+         *
+         * @param angle The angle of rotation in radians.
+         */
+        void rotateY(const float angle);
+        /**
+         * Rotates the Solid around the Z-axis by a specified angle.
+         *
+         * @param angle The angle of rotation in radians.
+         */
+        void rotateZ(const float angle);
 
         /**
          * Renders the solid using the specified shader program.
@@ -39,6 +62,7 @@ namespace kdr
 
       protected:
         kdr::space::Vec3 position {0.f};
+        kdr::space::Mat4 model    {1.f};
 
         kdr::gfx::VAO* VAO {NULL};
         kdr::gfx::VBO* VBO {NULL};
@@ -64,7 +88,7 @@ namespace kdr
     /**
      * A class representing a 3D cube.
      */
-    class Cube : Solid
+    class Cube : public Solid
     {
       public:
         /**
@@ -86,7 +110,7 @@ namespace kdr
     /**
      * A class representing a 3D cuboid.
      */
-    class Cuboid : Solid
+    class Cuboid : public Solid
     {
       public:
         /**
@@ -110,7 +134,7 @@ namespace kdr
     /**
      * A class representing a 3D pyramid.
      */
-    class Pyramid : Solid
+    class Pyramid : public Solid
     {
       public:
         /**
@@ -133,7 +157,7 @@ namespace kdr
     /**
      * A class representing a 3D plane.
      */
-    class Plane : Solid
+    class Plane : public Solid
     {
       public:
         /**
@@ -156,7 +180,7 @@ namespace kdr
     /**
      * A class representing a 3D mesh.
      */
-    class Mesh : Solid
+    class Mesh : public Solid
     {
       public:
         /**

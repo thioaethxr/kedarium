@@ -55,11 +55,14 @@ class MainWindow : public kdr::Window
         }
       }
 
+      this->magmaTexture.TextureUnit(this->defaultShader.getID(), "tex0", 0);
       this->concreteTexture.TextureUnit(this->defaultShader.getID(), "tex0", 0);
     }
 
     void update()
     {
+      this->testMesh.rotateY(100.f * this->getDeltaTime());
+
       if (kdr::keys::isPressed(this->getGlfwWindow(), kdr::Key::E))
       {
         this->getBoundCamera()->setIsMouseLocked(true);
@@ -99,14 +102,23 @@ class MainWindow : public kdr::Window
     void render()
     {
       this->bindShader(this->defaultShader);
-      this->concreteTexture.Bind();
+      this->magmaTexture.Bind();
       testMesh.render(this->defaultShader.getID());
+      this->concreteTexture.Bind();
+      testPlane.render(this->defaultShader.getID());
     }
 
   private:
     kdr::gfx::Shader defaultShader {
       "resources/Shaders/default.vert",
       "resources/Shaders/default.frag"
+    };
+    kdr::gfx::Texture magmaTexture {
+      "resources/Textures/magma.png",
+      GL_TEXTURE_2D,
+      GL_TEXTURE0,
+      GL_RGBA,
+      GL_UNSIGNED_BYTE
     };
     kdr::gfx::Texture concreteTexture {
       "resources/Textures/concrete.png",
@@ -118,6 +130,11 @@ class MainWindow : public kdr::Window
     kdr::solids::Mesh testMesh {
       {0.f, 0.f, 0.f},
       "resources/Models/icosphere.obj"
+    };
+    kdr::solids::Plane testPlane {
+      {0.f, -1.f, 0.f},
+      5.f,
+      5.f
     };
     std::vector<kdr::solids::Pyramid*> pyramids;
     bool pressingFullscreen {false};

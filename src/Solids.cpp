@@ -11,6 +11,21 @@ kdr::solids::Solid::~Solid()
   delete this->EBO;
 }
 
+void kdr::solids::Solid::rotateX(const float angle)
+{
+  this->model = kdr::space::rotate(this->model, angle, {1.f, 0.f, 0.f});
+}
+
+void kdr::solids::Solid::rotateY(const float angle)
+{
+  this->model = kdr::space::rotate(this->model, angle, {0.f, 1.f, 0.f});
+}
+
+void kdr::solids::Solid::rotateZ(const float angle)
+{
+  this->model = kdr::space::rotate(this->model, angle, {0.f, 0.f, 1.f});
+}
+
 void kdr::solids::Solid::_initializeComponents(GLfloat vertices[], GLsizeiptr verticesSize, GLuint indices[], GLsizeiptr indicesSize)
 {
   this->VAO = new kdr::gfx::VAO();
@@ -32,13 +47,8 @@ void kdr::solids::Solid::_initializeComponents(GLfloat vertices[], GLsizeiptr ve
 
 void kdr::solids::Solid::_applyPosition(const GLuint shaderID)
 {
-  kdr::space::Mat4 model {1.f};
-  model = kdr::space::translate(
-    model,
-    this->position
-  );
   GLuint modelLoc = glGetUniformLocation(shaderID, "model");
-  glUniformMatrix4fv(modelLoc, 1, GL_FALSE, kdr::space::valuePointer(model));
+  glUniformMatrix4fv(modelLoc, 1, GL_FALSE, kdr::space::valuePointer(this->model));
 }
 
 GLuint cubeIndices[] = {
