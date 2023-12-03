@@ -2,9 +2,11 @@
 #define KDR_SOLIDS_HPP
 
 #include <GL/glew.h>
+#include <string>
 
 #include "Space.hpp"
 #include "Graphics.hpp"
+#include "Model.hpp"
 
 namespace kdr
 {
@@ -149,6 +151,41 @@ namespace kdr
          * @param shaderID The ID of the shader program to use for rendering.
          */
         void render(const GLuint shaderID);
+    };
+
+    /**
+     * A class representing a 3D mesh.
+     */
+    class Mesh : Solid
+    {
+      public:
+        /**
+         * Constructs a Mesh object with a specified initial position and loads mesh data from an OBJ file.
+         *
+         * @param position The initial position of the mesh in 3D space.
+         * @param objPath  The file path to the OBJ model.
+         */
+        Mesh(const kdr::space::Vec3& position, const std::string& objPath);
+
+        /**
+         * Generates vertex array object (VAO), vertex buffer object (VBO), and element buffer object (EBO) components for the Mesh.
+         *
+         * @param vertices  A vector containing vertex positions.
+         * @param texCoords A vector containing texture coordinates.
+         * @param indices   A vector containing face indices.
+         * @return True if the component generation is successful; false otherwise.
+         */
+        bool generateComponents(const std::vector<kdr::space::Vec3>& vertices, const std::vector<kdr::space::Vec2>& texCoords, const std::vector<unsigned int>& indices);
+
+        /**
+         * Renders the mesh using the provided shader program.
+         *
+         * @param shaderID The ID of the shader program to use for rendering.
+         */
+        void render(const GLuint shaderID);
+
+      private:
+        unsigned int indicesCount;
     };
   }
 }

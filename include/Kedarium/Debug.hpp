@@ -10,6 +10,17 @@ namespace kdr
   namespace debug
   {
     /**
+     * Prints the components of a 2D vector to the console.
+     *
+     * @param vec The 2D vector to be printed.
+     * @param label An optional label for the vector (default is an empty string).
+     */
+    inline void printVector(const kdr::space::Vec2& vec, const std::string& label = "")
+    {
+      if (!label.empty()) std::cout << label << " (Vector)\n";
+      std::cout << "X: " << vec.x << "; Y: " << vec.y << '\n';
+    }
+    /**
      * Prints the components of a 3D vector to the console.
      *
      * @param vec The 3D vector to be printed.

@@ -100,11 +100,7 @@ class MainWindow : public kdr::Window
     {
       this->bindShader(this->defaultShader);
       this->concreteTexture.Bind();
-      testPlane.render(this->defaultShader.getID());
-      for (kdr::solids::Pyramid* pyramid : this->pyramids)
-      {
-        pyramid->render(this->defaultShader.getID());
-      }
+      testMesh.render(this->defaultShader.getID());
     }
 
   private:
@@ -119,10 +115,9 @@ class MainWindow : public kdr::Window
       GL_RGBA,
       GL_UNSIGNED_BYTE
     };
-    kdr::solids::Plane testPlane {
-      {0.f, -1.f, 0.f},
-      5.f,
-      5.f
+    kdr::solids::Mesh testMesh {
+      {0.f, 0.f, 0.f},
+      "resources/Models/icosphere.obj"
     };
     std::vector<kdr::solids::Pyramid*> pyramids;
     bool pressingFullscreen {false};

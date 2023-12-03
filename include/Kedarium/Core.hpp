@@ -11,6 +11,10 @@ extern const std::string ENGINE_VERSION;
 extern const std::string ENGINE_AUTHOR;
 extern const std::string ENGINE_LICENSE;
 
+extern const std::string OBJ_VERTEX_PREFIX;
+extern const std::string OBJ_TEXCOORD_PREFIX;
+extern const std::string OBJ_FACE_PREFIX;
+
 namespace kdr
 {
   namespace core

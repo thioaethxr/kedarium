@@ -23,6 +23,98 @@ namespace kdr
     { return degrees * kdr::space::PI / 180.f; }
 
     /**
+     * 2D vector class representing a point or direction in 2D space.
+     */
+    class Vec2
+    {
+      public:
+        float x {0.f};
+        float y {0.f};
+
+        /**
+         * Constructs a Vec2 with specified x and y components.
+         *
+         * @param x The x-component of the vector.
+         * @param y The y-component of the vector.
+         */
+        Vec2(const float x, const float y)
+        : x(x), y(y)
+        {}
+        /**
+         * Constructs a Vec2 with all components set to the same scalar value.
+         *
+         * @param scalar The scalar value to set for all components.
+         */
+        Vec2(const float scalar)
+        : x(scalar), y(scalar)
+        {}
+
+        /**
+         * Overloaded addition operator for Vec2.
+         *
+         * @param vec The vector to add.
+         * @return A new Vec2 representing the sum of the two vectors.
+         */
+        Vec2 operator+(const Vec2& vec) const
+        {
+          return Vec2(
+            this->x + vec.x,
+            this->y + vec.y
+          );
+        }
+        /**
+         * Overloaded subtraction operator for Vec2.
+         *
+         * @param vec The vector to subtract.
+         * @return A new Vec2 representing the difference between the two vectors.
+         */
+        Vec2 operator-(const Vec2& vec) const
+        {
+          return Vec2(
+            this->x - vec.x,
+            this->y - vec.y
+          );
+        }
+        /**
+         * Multiplies a 2D vector by a scalar.
+         *
+         * @param scalar The scalar value to multiply the vector by.
+         * @return The resulting vector after multiplication.
+         */
+        Vec2 operator*(float scalar) const
+        {
+          return Vec2(
+            this->x * scalar,
+            this->y * scalar
+          );
+        }
+        /**
+         * Adds another 2D vector to the current vector in-place.
+         *
+         * @param vec The vector to be added.
+         * @return Reference to the modified current vector.
+         */
+        Vec2& operator+=(const Vec2& vec)
+        {
+          this->x += vec.x;
+          this->y += vec.y;
+          return *this;
+        }
+        /**
+         * Subtracts another 2D vector from the current vector in-place.
+         *
+         * @param vec The vector to be subtracted.
+         * @return Reference to the modified current vector.
+         */
+        Vec2& operator-=(const Vec2& vec)
+        {
+          this->x -= vec.x;
+          this->y -= vec.y;
+          return *this;
+        }
+    };
+
+    /**
      * 3D vector class representing a point or direction in 3D space.
      */
     class Vec3
@@ -188,6 +280,20 @@ namespace kdr
     };
 
     /**
+     * Normalizes a 2D vector.
+     *
+     * @param vec The 2D vector to be normalized.
+     * @return A normalized 2D vector.
+     */
+    inline kdr::space::Vec2 normalize(const kdr::space::Vec2& vec)
+    {
+      const float length = std::sqrt(vec.x * vec.x + vec.y * vec.y);
+      return length > 0.f ? kdr::space::Vec2 {
+        vec.x / length,
+        vec.y / length
+      } : kdr::space::Vec2 {0.f};
+    }
+    /**
      * Normalizes a 3D vector.
      *
      * @param vec The 3D vector to be normalized.
@@ -202,6 +308,15 @@ namespace kdr
         vec.z / length,
       } : kdr::space::Vec3 {0.f};
     }
+    /**
+     * Computes the dot product of two 2D vectors.
+     *
+     * @param vecA The first 2D vector.
+     * @param vecB The second 2D vector.
+     * @return The dot product of the two vectors.
+     */
+    inline float dot(const kdr::space::Vec2& vecA, const kdr::space::Vec2& vecB)
+    { return vecA.x * vecB.x + vecA.y * vecB.y; }
     /**
      * Computes the dot product of two 3D vectors.
      *

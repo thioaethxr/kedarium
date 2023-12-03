@@ -209,3 +209,62 @@ void kdr::solids::Plane::render(const GLuint shaderID)
   glDrawElements(GL_TRIANGLES, sizeof(planeIndices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
   this->VAO->Unbind();
 }
+
+kdr::solids::Mesh::Mesh(const kdr::space::Vec3& position, const std::string& objPath) : kdr::solids::Solid(position)
+{
+  std::vector<kdr::space::Vec3> vertices;
+  std::vector<kdr::space::Vec2> texCoords;
+  std::vector<unsigned int>     indices;
+
+  kdr::model::loadFromObj(objPath, vertices, texCoords, indices);
+  this->indicesCount = indices.size() / 3;
+  this->generateComponents(vertices, texCoords, indices);
+}
+
+bool kdr::solids::Mesh::generateComponents(const std::vector<kdr::space::Vec3>& vertices, const std::vector<kdr::space::Vec2>& texCoords, const std::vector<unsigned int>& indices)
+{
+  std::vector<GLfloat> VBOvertices;
+  std::vector<GLuint> EBOindices;
+
+  for (std::vector<unsigned int>::size_type i = 0; i < indices.size() / 3; i++)
+  {
+    EBOindices.push_back(i);
+    kdr::space::Vec3 position = vertices.at(indices.at(i * 3));
+    kdr::space::Vec2 texCoord = texCoords.at(indices.at(i * 3 + 1));
+
+    VBOvertices.push_back(position.x);
+    VBOvertices.push_back(position.y);
+    VBOvertices.push_back(position.z);
+    VBOvertices.push_back(1.f);
+    VBOvertices.push_back(1.f);
+    VBOvertices.push_back(1.f);
+    VBOvertices.push_back(texCoord.x);
+    VBOvertices.push_back(texCoord.y);
+  }
+
+  this->VAO = new kdr::gfx::VAO();
+  this->VBO = new kdr::gfx::VBO(VBOvertices.data(), VBOvertices.size() * sizeof(GLfloat));
+  this->EBO = new kdr::gfx::EBO(EBOindices.data(), EBOindices.size() * sizeof(GLuint));
+
+  this->VAO->Bind();
+  this->VBO->Bind();
+  this->EBO->Bind();
+
+  this->VAO->LinkAttribute(*this->VBO, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)0);
+  this->VAO->LinkAttribute(*this->VBO, 1, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+  this->VAO->LinkAttribute(*this->VBO, 2, 2, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
+
+  this->VAO->Unbind();
+  this->VBO->Unbind();
+  this->EBO->Unbind();
+
+  return true;
+}
+
+void kdr::solids::Mesh::render(const GLuint shaderID)
+{
+  this->VAO->Bind();
+  this->_applyPosition(shaderID);
+  glDrawElements(GL_TRIANGLES, this->indicesCount, GL_UNSIGNED_INT, NULL);
+  this->VAO->Unbind();
+}
